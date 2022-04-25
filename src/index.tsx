@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 
 // Use consistent styling
 import 'sanitize.css/sanitize.css';
+import 'font-loader';
 
 // Import root app
 import { App } from 'app';
