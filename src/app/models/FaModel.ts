@@ -5,23 +5,23 @@ interface Transitions {
 }
 
 class FaModel {
-  state: string[];
+  states: string[];
   symbols: string[];
   startState: string;
-  endState: string[];
+  endStates: string[];
   transitions?: Transitions;
 
   constructor(
     state: string[],
     symbols: string[],
     startState: string,
-    endState: string[],
+    endStates: string[],
     transitions: Transitions,
   ) {
-    this.state = state;
+    this.states = state;
     this.symbols = symbols;
     this.startState = startState;
-    this.endState = endState;
+    this.endStates = endStates;
     this.transitions = transitions;
   }
 }
