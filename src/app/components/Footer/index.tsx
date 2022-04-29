@@ -15,7 +15,6 @@ const StyleFooter = styled(`div`)(() => ({
   alignItems: "center",
   justifyContent: "center",
   alignContent: "center",
-  position: "fixed",
   bottom: 0,
   margin: "0px 0px 0px 00px",
   padding: "0px 30px 100px 0px",
