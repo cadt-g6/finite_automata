@@ -24,6 +24,18 @@ class FaModel {
     this.endStates = endStates;
     this.transitions = transitions;
   }
+
+  isNFA(): Boolean {
+    const transitions = this.transitions;
+    let isNfa = false;
+    for (const state in transitions) {
+      for (const symbol in transitions[state]) {
+        const symbolTransition = transitions[state][symbol];
+        if (symbolTransition.length > 1) isNfa = true;
+      }
+    }
+    return isNfa ? true : false;
+  }
 }
 
 export default FaModel;
