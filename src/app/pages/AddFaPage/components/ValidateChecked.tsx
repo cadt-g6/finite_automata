@@ -1,15 +1,6 @@
 import React from 'react';
 import {
-  Container,
   Typography,
-  Tooltip,
-  Button,
-  Divider,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
   Checkbox,
   FormGroup,
   FormControlLabel,
@@ -18,7 +9,7 @@ import {
 
 const ValidateChecked = () => {
   return (
-    <div style={{ flex: 1, marginLeft: '24px' }}>
+    <div style={{ flex: 1 }}>
       <Typography variant="subtitle2">Transitions</Typography>
       <Typography
         sx={{ fontSize: '12px', marginTop: '14px' }}

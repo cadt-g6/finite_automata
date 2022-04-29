@@ -24,7 +24,7 @@ const columns = ['a', 'b', 'c'];
 
 const TransitionForm = () => {
   return (
-    <div style={{ flex: 1, marginLeft: '24px' }}>
+    <div style={{ flex: 1 }}>
       <Typography variant="h6">Transitions</Typography>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
