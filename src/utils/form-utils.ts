@@ -18,7 +18,9 @@ export const getTransitionObjectFromForm = datas => {
   getArrayFromValues(states).forEach(state => {
     let alphabetTransition = {};
     getArrayFromValues(alphabets).forEach(alphabet => {
-      alphabetTransition[alphabet] = datas[`${state}${alphabet}`];
+      alphabetTransition[alphabet] = datas[`${state}${alphabet}`]
+        ? datas[`${state}${alphabet}`]
+        : [];
     });
 
     transitions[state] = alphabetTransition;
