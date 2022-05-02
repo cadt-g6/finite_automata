@@ -31,7 +31,7 @@ class FaModel {
     for (const state in transitions) {
       for (const symbol in transitions[state]) {
         const symbolTransition = transitions[state][symbol];
-        if (symbolTransition.length > 1) isNfa = true;
+        if (symbolTransition.length != 1) isNfa = true;
       }
     }
     return isNfa ? true : false;
