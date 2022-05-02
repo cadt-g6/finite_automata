@@ -28,26 +28,34 @@ const errorStyle = {
   },
 };
 
+type SelectProps = {
+  error?: string;
+  errorMsg?: string;
+  multiple?: boolean;
+  label?: string;
+  [props: string]: any;
+};
+
 const SelectForm = ({
   error,
   errorMsg,
-  multiple,
   label,
+  multiple,
   options,
   onChange,
   ...props
-}) => {
+}: SelectProps) => {
   return (
     <FormControl fullWidth>
       <InputLabel variant="standard" shrink>
         <Box sx={{ color: '#000000' }}>{label}</Box>
       </InputLabel>
       <SelectField
-        sx={error && errorStyle}
+        sx={error ? errorStyle : {}}
         {...props}
         multiple={multiple}
-        options={options}
         onChange={onChange}
+        options={options}
         renderInput={params => <TextField {...params} />}
       />
       {error && (
