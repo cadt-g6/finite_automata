@@ -18,122 +18,135 @@ import InputForm from './Fields/InputForm';
 import SelectForm from './Fields/SelectForm';
 import Title from './Title';
 import TransitionForm from './TransitionForm';
+import ValidateChecked from './ValidateChecked';
+import { getArrayFromValues } from 'utils/form-utils';
 
-const FormFields = () => {
+const FormFields = ({ onSubmit }) => {
   const {
     control,
     watch,
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const watchAllFields = watch();
-
-  const onSubmit = (data, e) => {
-    console.log(data, e);
-  };
-  const onError = (errors, e) => {
-    console.log(errors, e);
-  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit, onError)} style={{ flex: '1' }}>
-      <Title />
-      <Divider sx={{ marginTop: '12px' }} />
-      <div style={{ margin: '20px 0 0px 0' }}>
-        <Controller
-          name="states"
-          control={control}
-          rules={{
-            required: 'Fields can not be empty',
-            pattern: {
-              value:
-                /^(((([a-z]|[A-Z]|[0-9])+\d*)(?!.*,\3\b)),)*([a-z]|[A-Z]|[0-9])+\d*$/,
-              message: 'Values must be different and correct format ',
-            },
-          }}
-          render={({ field: { onChange } }) => (
-            <InputForm
-              error={errors.states}
-              errorMsg={errors.states?.message}
-              // helperText="Erorror"
-              toolTipValue="Please seperate values by comma"
-              sx={{ width: '100%' }}
-              label="States"
-              size="small"
-              onChange={onChange}
-            />
-          )}
-        />
-      </div>
-      <div style={{ margin: '20px 0' }}>
-        <Controller
-          name="alphabets"
-          control={control}
-          rules={{
-            required: 'Fields can not be empty',
-            pattern: {
-              value:
-                /^(((([a-z]|[A-Z]|[0-9])+\d*)(?!.*,\3\b)),)*([a-z]|[A-Z]|[0-9])+\d*$/,
-              message: 'Values must be different and correct format ',
-            },
-          }}
-          render={({ field: { onChange } }) => (
-            <InputForm
-              error={errors.alphabets}
-              errorMsg={errors.alphabets?.message}
-              toolTipValue="Please seperate values by comma"
-              sx={{ width: '100%' }}
-              label="Alphabet"
-              size="small"
-              onChange={onChange}
-            />
-          )}
-        />
-      </div>
-      <div style={{ margin: '20px 0', display: 'flex' }}>
-        <Box sx={{ minWidth: 120, flex: 1, mr: 2 }}>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} style={{ flex: '1' }}>
+        <Title />
+        <Divider sx={{ marginTop: '12px' }} />
+        <div style={{ margin: '20px 0 0px 0' }}>
           <Controller
-            name="initialState"
+            name="states"
             control={control}
             rules={{
               required: 'Fields can not be empty',
+              pattern: {
+                value:
+                  /^(((([a-z]|[A-Z]|[0-9])+\d*)(?!.*,\3\b)),)*([a-z]|[A-Z]|[0-9])+\d*$/,
+                message: 'Values must be different and correct format ',
+              },
             }}
             render={({ field: { onChange } }) => (
-              <SelectForm
-                error={errors.initialState}
-                errorMsg={errors.initialState?.message}
-                multiple={false}
+              <InputForm
+                error={errors.states}
+                errorMsg={errors.states?.message}
+                // helperText="Erorror"
+                toolTipValue="Please seperate values by comma"
+                sx={{ width: '100%' }}
+                label="States"
                 size="small"
-                label="Initial State"
-                options={['q1', 'q2']}
-                onChange={(event, reason, details) => onChange(reason)}
+                onChange={onChange}
               />
             )}
           />
-        </Box>
-        <Box sx={{ minWidth: 120, flex: 1 }}>
+        </div>
+        <div style={{ margin: '20px 0' }}>
           <Controller
-            name="endStates"
+            name="alphabets"
             control={control}
             rules={{
               required: 'Fields can not be empty',
+              pattern: {
+                value:
+                  /^(((([a-z]|[A-Z]|[0-9])+\d*)(?!.*,\3\b)),)*([a-z]|[A-Z]|[0-9])+\d*$/,
+                message: 'Values must be different and correct format ',
+              },
             }}
             render={({ field: { onChange } }) => (
-              <SelectForm
-                error={errors.endStates}
-                errorMsg={errors.endStates?.message}
-                multiple={true}
+              <InputForm
+                error={errors.alphabets}
+                errorMsg={errors.alphabets?.message}
+                toolTipValue="Please seperate values by comma"
+                sx={{ width: '100%' }}
+                label="Alphabet"
                 size="small"
-                label="End States"
-                options={['q1', 'q2']}
-                onChange={(event, reason, details) => onChange(reason)}
+                onChange={onChange}
               />
             )}
           />
-        </Box>
-      </div>
-      {/* <TransitionForm /> */}
-    </form>
+        </div>
+        <div style={{ margin: '20px 0', display: 'flex' }}>
+          <Box sx={{ minWidth: 120, flex: 1, mr: 2 }}>
+            <Controller
+              name="initialState"
+              control={control}
+              rules={{
+                required: 'Fields can not be empty',
+              }}
+              render={({ field: { onChange } }) => (
+                <SelectForm
+                  error={errors.initialState}
+                  errorMsg={errors.initialState?.message}
+                  multiple={false}
+                  size="small"
+                  label="Initial State"
+                  options={getArrayFromValues(watch('states'))}
+                  onChange={(event, reason, details) => onChange(reason)}
+                />
+              )}
+            />
+          </Box>
+          <Box sx={{ minWidth: 120, flex: 1 }}>
+            <Controller
+              name="endStates"
+              control={control}
+              rules={{
+                required: 'Fields can not be empty',
+              }}
+              render={({ field: { onChange } }) => (
+                <SelectForm
+                  error={errors.endStates}
+                  errorMsg={errors.endStates?.message}
+                  multiple={true}
+                  size="small"
+                  label="End States"
+                  options={getArrayFromValues(watch('states'))}
+                  onChange={(event, reason, details) => onChange(reason)}
+                />
+              )}
+            />
+          </Box>
+        </div>
+
+        {watch('states') &&
+          watch('alphabets') &&
+          watch('initialState') &&
+          watch('endStates') &&
+          watch('endStates').length > 0 && (
+            <TransitionForm
+              control={control}
+              states={watch('states')}
+              alphabets={watch('alphabets')}
+            />
+          )}
+      </form>
+      <ValidateChecked
+        states={watch('states')}
+        alphabets={watch('alphabets')}
+        initialState={watch('initialState')}
+        endStates={watch('endStates')}
+      />
+    </>
   );
 };
 

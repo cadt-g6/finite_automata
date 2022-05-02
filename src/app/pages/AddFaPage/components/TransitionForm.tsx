@@ -8,21 +8,11 @@ import Typography from '@mui/material/Typography';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material';
+import { getArrayFromValues } from 'utils/form-utils';
+import SelectForm from './Fields/SelectForm';
+import { Controller } from 'react-hook-form';
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = ['q1', 'q2', 'q3'];
-const columns = ['a', 'b', 'c'];
-
-const TransitionForm = () => {
+const TransitionForm = ({ states, alphabets, control }) => {
   return (
     <div style={{ flex: 1 }}>
       <Typography variant="h6">Transitions</Typography>
@@ -36,7 +26,7 @@ const TransitionForm = () => {
                   borderRight: '1px solid rgba(224, 224, 224, 1)',
                 }}
               ></TableCell>
-              {columns.map((item, index) => (
+              {getArrayFromValues(alphabets).map((item, index) => (
                 <TableCell
                   key={index}
                   sx={{
@@ -51,7 +41,7 @@ const TransitionForm = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
+            {getArrayFromValues(states).map((row, index) => (
               <TableRow key={index}>
                 <TableCell
                   sx={{
@@ -62,7 +52,7 @@ const TransitionForm = () => {
                 >
                   {row}
                 </TableCell>
-                {columns.map((item, index) => (
+                {getArrayFromValues(alphabets).map((column, index) => (
                   <TableCell
                     key={index}
                     sx={{
@@ -70,7 +60,19 @@ const TransitionForm = () => {
                       borderRight: '1px solid rgba(224, 224, 224, 1)',
                     }}
                   >
-                    <TextField size="small" variant="outlined" />
+                    <Controller
+                      name={`${row}${column}`}
+                      control={control}
+                      render={({ field: { onChange } }) => (
+                        <SelectForm
+                          multiple={true}
+                          options={getArrayFromValues(states)}
+                          onChange={(event, reason, details) =>
+                            onChange(reason)
+                          }
+                        />
+                      )}
+                    />
                   </TableCell>
                 ))}
               </TableRow>
