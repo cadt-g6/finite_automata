@@ -7,7 +7,7 @@ import {
   styled,
 } from '@mui/material';
 
-const ValidateChecked = () => {
+const ValidateChecked = ({ states, alphabets, initialState, endStates }) => {
   return (
     <div style={{ flex: 1 }}>
       <Typography variant="subtitle2">Transitions</Typography>
@@ -20,20 +20,29 @@ const ValidateChecked = () => {
       <div>
         <FormGroup>
           <FormControlLabel
-            control={<Checkbox size="small" checked />}
+            control={<Checkbox size="small" checked={states ? true : false} />}
             label="Add states"
           />
 
           <FormControlLabel
-            control={<Checkbox size="small" />}
+            control={
+              <Checkbox size="small" checked={alphabets ? true : false} />
+            }
             label="Add alphabets"
           />
           <FormControlLabel
-            control={<Checkbox size="small" defaultChecked />}
+            control={
+              <Checkbox size="small" checked={initialState ? true : false} />
+            }
             label="Set initial state"
           />
           <FormControlLabel
-            control={<Checkbox size="small" />}
+            control={
+              <Checkbox
+                size="small"
+                checked={endStates && endStates.length > 0 ? true : false}
+              />
+            }
             label="Set final state"
           />
         </FormGroup>

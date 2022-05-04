@@ -26,7 +26,7 @@ const MenuDropDown = () => {
   };
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-      <StyledLink to="/">
+      <StyledLink to="/add">
         <AddIcon />
       </StyledLink>
       <StyledButton
