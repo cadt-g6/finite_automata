@@ -35,7 +35,7 @@ const TransitionForm = ({ states, alphabets, control }) => {
                   }}
                   align="center"
                 >
-                  {item}
+                  {item === 'E' ? 'ε' : item}
                 </TableCell>
               ))}
             </TableRow>
@@ -65,6 +65,7 @@ const TransitionForm = ({ states, alphabets, control }) => {
                       control={control}
                       render={({ field: { onChange } }) => (
                         <SelectForm
+                          size="small"
                           multiple={true}
                           options={getArrayFromValues(states)}
                           onChange={(event, reason, details) =>

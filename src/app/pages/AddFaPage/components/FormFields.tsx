@@ -78,7 +78,7 @@ const FormFields = ({ onSubmit }) => {
                 onBlur={onBlur}
                 error={errors.alphabets}
                 errorMsg={errors.alphabets?.message}
-                toolTipValue="Please seperate values by comma"
+                toolTipValue="Please seperate values by comma. Note: If you want to input Epsilon please use Capital E "
                 sx={{ width: '100%' }}
                 label="Alphabet"
                 size="small"
