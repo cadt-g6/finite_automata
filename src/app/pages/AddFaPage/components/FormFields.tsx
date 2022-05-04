@@ -27,7 +27,7 @@ const FormFields = ({ onSubmit }) => {
     watch,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm({ mode: 'onBlur', reValidateMode: 'onChange' });
 
   return (
     <>
@@ -46,8 +46,9 @@ const FormFields = ({ onSubmit }) => {
                 message: 'Values must be different and correct format ',
               },
             }}
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, onBlur } }) => (
               <InputForm
+                onBlur={onBlur}
                 error={errors.states}
                 errorMsg={errors.states?.message}
                 // helperText="Erorror"
@@ -72,8 +73,9 @@ const FormFields = ({ onSubmit }) => {
                 message: 'Values must be different and correct format ',
               },
             }}
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, onBlur } }) => (
               <InputForm
+                onBlur={onBlur}
                 error={errors.alphabets}
                 errorMsg={errors.alphabets?.message}
                 toolTipValue="Please seperate values by comma"
@@ -93,8 +95,9 @@ const FormFields = ({ onSubmit }) => {
               rules={{
                 required: 'Fields can not be empty',
               }}
-              render={({ field: { onChange } }) => (
+              render={({ field: { onChange, onBlur } }) => (
                 <SelectForm
+                  onBlur={onBlur}
                   error={errors.initialState}
                   errorMsg={errors.initialState?.message}
                   multiple={false}
@@ -113,8 +116,9 @@ const FormFields = ({ onSubmit }) => {
               rules={{
                 required: 'Fields can not be empty',
               }}
-              render={({ field: { onChange } }) => (
+              render={({ field: { onChange, onBlur } }) => (
                 <SelectForm
+                  onBlur={onBlur}
                   error={errors.endStates}
                   errorMsg={errors.endStates?.message}
                   multiple={true}
