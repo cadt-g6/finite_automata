@@ -1,6 +1,6 @@
 import FaModel from 'app/models/FaModel';
-import Step1MinimizeDfa from './minimize_dfa/Step1MinimizeDfa';
-import Step2MinimizeDfa from './minimize_dfa/Step2MinimizeDfa';
+import Step1MinimizeDfa from './minimize_dfa/step1MinimizeDfa';
+import Step2MinimizeDfa from './minimize_dfa/step2MinimizeDfa';
 
 class MinimizeDFAService {
   fa: FaModel;
