@@ -57,15 +57,15 @@ class FaModel {
     })
     
     //set transition to dfa
-    let dfa:any = {}
+    let dfa_transition:any = {}
     nfa_state.forEach(function(i,indexi){
-      dfa[i]={}
+      dfa_transition[i]={}
       for(const j in nfa[i]){
         let t = ''
         nfa[i][j].forEach(function(k,indexk){
           t=t+k
         })
-        dfa[i][j]=t
+        dfa_transition[i][j]=t
       }
     })
     
@@ -73,12 +73,21 @@ class FaModel {
     
     //set transition to new generated state
     dfa_state_n.forEach(function(i,indexi){
-      dfa[i]={}
+      dfa_transition[i]={}
       path.forEach(function(j,indexj){
-        dfa[i][j]=i
+        dfa_transition[i][j]=i
       })
     })
-    console.log("Final DFA",dfa)
+
+    let dfa:any = {
+      states: dfa_state.slice(),
+      symbols: path.slice(),
+      startState: this.startState,
+      endStates: this.endStates.slice(),
+      transitions: JSON.parse(JSON.stringify(dfa_transition))
+    }
+
+    // console.log(dfa)
 
     return dfa;
   }
