@@ -1,31 +1,54 @@
-import {
-  Container,
-  Typography,
-  Tooltip,
-  Button,
-  Divider,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  Checkbox,
-  FormGroup,
-  FormControlLabel,
-  styled,
-} from '@mui/material';
-import * as React from 'react';
+import { styled } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import Title from './components/Title';
+import FormFields from './components/FormFields';
+import { getTransitionObjectFromForm } from 'utils/form-utils';
+import FaModel from 'app/models/FaModel';
+import Features from './components/Features';
 
-import CreateFa from './components/CreateFa';
-
-const StyledContainer = styled('div')({
-  padding: '0 24px',
-  margin: '32px 0',
-});
+const StyledContainer = styled('div')(({ theme }) => ({
+  margin: '64px 144px',
+  maxWidth: '1600px',
+  [theme.breakpoints.down('lg')]: {
+    margin: '64px 15px',
+  },
+}));
 
 export function AddFaPage() {
+  const [faData, setFaData] = useState<any>();
+  const onSubmit = (data, e) => {
+    const {
+      initialState,
+      states,
+      alphabets,
+
+      endStates,
+      ...newData
+    } = data;
+    const Fa = {
+      initialState,
+      states,
+      alphabets,
+
+      endStates,
+      transitions: getTransitionObjectFromForm(data),
+    };
+    setFaData(Fa);
+  };
+  useEffect(() => {
+    if (faData) {
+      const data = new FaModel(
+        faData.states,
+        faData.alphabets,
+        faData.initialState,
+        faData.endStates,
+        faData.transitions,
+      );
+      console.log('IS NFA ?', data.isNFA());
+    }
+
+    console.log(faData);
+  }, [faData]);
   return (
     <>
       <Helmet>
@@ -33,7 +56,8 @@ export function AddFaPage() {
         <meta name="description" content="A Boilerplate application homepage" />
       </Helmet>
       <StyledContainer>
-        <CreateFa />
+        <FormFields onSubmit={onSubmit} />
+        <Features />
       </StyledContainer>
     </>
   );
