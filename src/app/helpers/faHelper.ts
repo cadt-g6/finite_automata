@@ -5,18 +5,25 @@ class FaHelper {
     return new Set<string>(Array.from(set).sort());
   }
 
-  static constructStates(states: Set<string>): String {
+  static removeWhereSet(items: Set<string>, condition): Set<string> {
+    return new Set<string>(FaHelper.removeWhere(Array.from(items), condition));
+  }
+
+  static removeWhere(items: string[], condition): string[] {
+    return items.filter(e => condition(e));
+  }
+
+  static constructStates(states: Set<string>): string {
     return Array.from(FaHelper.sortStates(states)).join(',');
   }
 
-  static findNextStateFromSingleState(state: String, fa: FaModel): Set<string> {
+  static findNextStateFromSingleState(state: string, fa: FaModel): Set<string> {
     let states: string[] = [];
 
-    for (let key in fa.transitions!) {
-      let transitions = fa.transitions[key];
-      for (let nextStates in transitions!) {
-        states.push(...nextStates.split(','));
-      }
+    let transitions = fa.transitions![state]!;
+    for (let symbol in transitions!) {
+      let nextStates = transitions![symbol];
+      states.push(...nextStates);
     }
 
     return new Set<string>(states);
@@ -24,10 +31,14 @@ class FaHelper {
 
   static findNextStates(states: Set<string>, fa: FaModel): Set<string> {
     let nextStates = new Set<string>();
-    for (let state in states) {
+
+    for (const state of Array.from(states)) {
       let _next = FaHelper.findNextStateFromSingleState(state, fa);
-      _next.forEach(nextStates.add, nextStates);
+      for (const states of Array.from(_next)) {
+        nextStates.add(states);
+      }
     }
+
     return nextStates;
   }
 }

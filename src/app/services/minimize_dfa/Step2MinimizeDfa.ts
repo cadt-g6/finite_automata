@@ -1,4 +1,4 @@
-import FaModel from 'app/models/FaModel';
+import FaModel from '../../models/FaModel';
 
 class Step2MinimizeDfa {
   fa: FaModel;

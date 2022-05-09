@@ -1,4 +1,4 @@
-import FaModel from 'app/models/FaModel';
+import FaModel from '../models/FaModel';
 import Step1MinimizeDfa from './minimize_dfa/step1MinimizeDfa';
 import Step2MinimizeDfa from './minimize_dfa/step2MinimizeDfa';
 
@@ -25,3 +25,50 @@ class MinimizeDFAService {
 }
 
 export default MinimizeDFAService;
+
+// npx ts-node src/app/services/minimizeDFAService.ts
+const fa = new FaModel(
+  ['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'],
+  ['a', 'b'],
+  'q0',
+  ['q2'],
+  {
+    q7: {
+      b: ['q2'],
+      a: ['q6'],
+    },
+    q1: {
+      b: ['q2'],
+      a: ['q6'],
+    },
+    q4: {
+      b: ['q5'],
+      a: ['q7'],
+    },
+    q2: {
+      b: ['q2'],
+      a: ['q0'],
+    },
+    q5: {
+      a: ['q2'],
+      b: ['q6'],
+    },
+    q3: {
+      a: ['q2'],
+      b: ['q6'],
+    },
+    q0: {
+      b: ['q5'],
+      a: ['q1'],
+    },
+    q6: {
+      b: ['q4'],
+      a: ['q6'],
+    },
+  },
+);
+
+const service = new MinimizeDFAService(fa);
+const newFa = service.step1(fa);
+
+console.log(newFa.states);
