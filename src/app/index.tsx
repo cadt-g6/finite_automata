@@ -16,6 +16,8 @@ import { HomePage } from './pages/HomePage/Loadable';
 import { AddFaPage } from './pages/AddFaPage';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
+import { ThemeProvider } from '@mui/material';
+import { theme } from 'themes';
 import PageLayout from './components/PageLayout';
 
 export function App() {
@@ -29,13 +31,15 @@ export function App() {
       >
         <meta name="description" content="A React Boilerplate application" />
       </Helmet>
-      <PageLayout>
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/add" component={AddFaPage} />
-          <Route component={NotFoundPage} />
-        </Switch>
-      </PageLayout>
+      <ThemeProvider theme={theme}>
+        <PageLayout>
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route exact path="/add" component={AddFaPage} />
+            <Route component={NotFoundPage} />
+          </Switch>
+        </PageLayout>
+      </ThemeProvider>
       <GlobalStyle />
     </BrowserRouter>
   );
