@@ -21,7 +21,7 @@ const TransitionForm = ({ states, alphabets, control }) => {
         [theme.breakpoints.down('md')]: { marginLeft: '0' },
       })}
     >
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} variant="outlined">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>

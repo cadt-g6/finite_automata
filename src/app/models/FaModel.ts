@@ -9,7 +9,7 @@ class FaModel {
   symbols: string[];
   startState: string;
   endStates: string[];
-  transitions?: Transitions;
+  transitions: Transitions;
 
   constructor(
     state: string[],
@@ -38,20 +38,20 @@ class FaModel {
   }
 
   //test if string is accepted by DFA
-  stringAcceptedByDFA(targetString, transitions) {
+  stringAcceptedByDFA(targetString) {
     let i = 0;
     let nextTransition;
     targetString.split('').forEach(symbol => {
       if (i == 0) {
-        nextTransition = transitions[this.startState][symbol][0];
+        nextTransition = this.transitions[this.startState][symbol][0];
         console.log(symbol, 'x', this.startState, '->', nextTransition);
         i++;
       } else {
-        nextTransition = transitions[nextTransition][symbol][0];
+        nextTransition = this.transitions[nextTransition][symbol][0];
         console.log(
           symbol,
           'x',
-          transitions[nextTransition][symbol][0],
+          this.transitions[nextTransition][symbol][0],
           '->',
           nextTransition,
         );
@@ -116,13 +116,12 @@ class FaModel {
     // return back every final states
   };
 
-  stringAcceptedByNFA = (targetString, transitions) => {
+  stringAcceptedByNFA = targetString => {
     const possibleState = this.findAllStates(
       targetString,
-      transitions,
+      this.transitions,
       this.startState,
     );
-    console.log(possibleState);
     const found = this.endStates.find(val => {
       if (possibleState.includes(val)) {
         return true;
