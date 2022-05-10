@@ -37,7 +37,7 @@ const FormFields = ({ onSubmit }) => {
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
       <Grid container direction="row">
         <Grid item xs={12} sm={12}>
-          <Title />
+          <Title control={control} />
         </Grid>
         <Grid item xs={12}>
           <Divider sx={{ marginTop: '12px' }} />
