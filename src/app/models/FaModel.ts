@@ -45,6 +45,11 @@ class FaModel {
     let nfa_end_state:string[] = this.endStates.slice();
     let dfa_end_state:string[] = this.endStates.slice();
 
+    console.log("nfa_state", nfa_state)
+    console.log("path", path)
+    console.log("nfa_end_state",nfa_end_state)
+    console.log("nfa_transition",nfa)
+
     //generate all dfa state
     nfa_state.forEach(function(i,indexi){
       for(const j in nfa[i]){
@@ -59,11 +64,12 @@ class FaModel {
         if (check_end_state && !dfa_end_state.includes(t)){
           dfa_end_state.push(t)
         }
-        if (!dfa_state.includes(t) && t.toLowerCase() != 'null'){
+        if (!dfa_state.includes(t) && t.length > 0){
           dfa_state.push(t)
         }
       }
     })
+    // console.log("dfa_state",dfa_state)
     
     //set transition to dfa
     let dfa_transition:any = {}
@@ -96,7 +102,7 @@ class FaModel {
       transitions: JSON.parse(JSON.stringify(dfa_transition))
     }
 
-    // console.log("Final dfa",dfa)
+    console.log("Final dfa",dfa)
 
     return dfa;
   }
