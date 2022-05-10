@@ -9,11 +9,20 @@ const StyledLink = styled(Link)(({ theme }) => ({
 }));
 
 const OurTeam = () => {
-
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
       <StyledLink to="/team">
-        <Typography variant='h6' sx={{fontSize: '14px'}}>OUR TEAM</Typography>
+        <Typography
+          variant="h6"
+          sx={theme => ({
+            fontSize: '14px',
+            [theme.breakpoints.down('sm')]: {
+              fontSize: '12px',
+            },
+          })}
+        >
+          OUR TEAM
+        </Typography>
       </StyledLink>
     </div>
   );

@@ -7,15 +7,20 @@ import TableHead from '@mui/material/TableHead';
 import Typography from '@mui/material/Typography';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { getArrayFromValues } from 'utils/form-utils';
 import SelectForm from './Fields/SelectForm';
 import { Controller } from 'react-hook-form';
 
 const TransitionForm = ({ states, alphabets, control }) => {
   return (
-    <div style={{ flex: 1 }}>
-      <Typography variant="h6">Transitions</Typography>
+    <Box
+      sx={theme => ({
+        marginTop: '40px',
+        marginLeft: '20px',
+        [theme.breakpoints.down('md')]: { marginLeft: '0' },
+      })}
+    >
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -25,7 +30,9 @@ const TransitionForm = ({ states, alphabets, control }) => {
                   width: '200px',
                   borderRight: '1px solid rgba(224, 224, 224, 1)',
                 }}
-              ></TableCell>
+              >
+                Q&sum;
+              </TableCell>
               {getArrayFromValues(alphabets).map((item, index) => (
                 <TableCell
                   key={index}
@@ -81,7 +88,7 @@ const TransitionForm = ({ states, alphabets, control }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Box>
   );
 };
 
