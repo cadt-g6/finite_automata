@@ -1,11 +1,20 @@
-import React from 'react';
-import { Typography, Grid, Box, styled, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  Typography,
+  Grid,
+  Box,
+  styled,
+  IconButton,
+  TextField,
+} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Link } from 'react-router-dom';
+import StringAcceptedDialog from 'app/components/Dialogs/StringAcceptedDiaglog';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   width: '100%',
+  minHeight: '126px',
   justifyContent: 'space-between',
   padding: '12px 16px',
   marginBottom: '24px',
@@ -14,15 +23,26 @@ const StyledBox = styled(Box)(({ theme }) => ({
     '0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)',
 }));
 
-const StyledLink = styled(Link)(({ theme }) => ({
+const StyledTypography = styled(Typography)(({ theme }) => ({
   display: 'block',
   width: 'max-content',
   textDecoration: 'none',
   color: '#192849',
-  marginTop: '30px',
+  marginLeft: '6px',
 }));
 
-const AcceptedString = () => {
+const AcceptedString = ({ faData }) => {
+  const [open, setOpen] = useState(false);
+  const [testString, setTestString] = useState('');
+  const isNfa = faData && faData.isNFA();
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
   return (
     <StyledBox>
       <div>
@@ -35,9 +55,31 @@ const AcceptedString = () => {
         >
           Language accepted by the FA.
         </Typography>
-        <StyledLink to="/">
-          <Typography>Test</Typography>
-        </StyledLink>
+        <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '14px' }}>
+          <TextField
+            size="small"
+            sx={{ maxWidth: '100px' }}
+            placeholder="abc..."
+            value={testString}
+            onChange={event => setTestString(event.target.value)}
+          />
+          <StyledTypography onClick={handleOpen} sx={{ cursor: 'pointer' }}>
+            Test
+          </StyledTypography>
+        </Box>
+        {faData && (
+          <StringAcceptedDialog
+            isAccepted={
+              isNfa
+                ? faData.stringAcceptedByNFA(testString)
+                : faData.stringAcceptedByDFA(testString)
+            }
+            isNfa={isNfa}
+            content={testString}
+            open={open}
+            handleClose={handleClose}
+          />
+        )}
       </div>
       <div>
         <IconButton>

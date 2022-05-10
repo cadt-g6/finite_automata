@@ -37,7 +37,7 @@ const Features = ({ faData }) => {
           <TestIfNfaOrDfa faData={faData} />
         </Grid>
         <Grid item xs={12} md={4.5}>
-          <AcceptedString />
+          <AcceptedString faData={faData} />
         </Grid>
         <Grid item xs={12} md={4.5}>
           <ConvertNFAtoDFA />
