@@ -6,7 +6,7 @@ const Title = () => {
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Typography variant="h5">Design FA</Typography>
       <Button type="submit" variant="contained">
-        Submit
+        Save
       </Button>
     </div>
   );
