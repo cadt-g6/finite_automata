@@ -1,5 +1,5 @@
-import FaHelper from '../../helpers/faHelper';
-import FaModel from '../..//models/FaModel';
+import FaHelper from '../../../helpers/FaHelper';
+import FaModel from '../../../models/FaModel';
 
 class Step1MinimizeDfa {
   fa: FaModel;
@@ -18,7 +18,7 @@ class Step1MinimizeDfa {
     let accessibleStates = new Set(initialNextStates);
     accessibleStates.add(this.fa.startState);
 
-    while (remainStates.size > 0) {
+    while (remainStates.size) {
       let nextStates = FaHelper.findNextStates(remainStates, this.fa);
       // remove if it already accessible before adding to remain
       nextStates = FaHelper.removeWhereSet(

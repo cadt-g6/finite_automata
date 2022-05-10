@@ -1,28 +1,36 @@
+import BaseModel from './BaseModel';
+
 interface Transitions {
   [k: string]: {
     [k: string]: string[];
   };
 }
 
-class FaModel {
+class FaModel extends BaseModel {
   states: string[];
   symbols: string[];
   startState: string;
   endStates: string[];
-  transitions?: Transitions;
+  transitions: Transitions;
+  title?: string;
 
   constructor(
-    state: string[],
+    states: string[],
     symbols: string[],
     startState: string,
     endStates: string[],
     transitions: Transitions,
+    createdAt?: Date,
+    updatedAt?: Date,
+    title?: string,
   ) {
-    this.states = state;
+    super(createdAt, updatedAt);
+    this.states = states;
     this.symbols = symbols;
     this.startState = startState;
     this.endStates = endStates;
     this.transitions = transitions;
+    this.title = title;
   }
 
   isNFA(): Boolean {
@@ -107,25 +115,28 @@ class FaModel {
     return dfa;
   }
   //test if string is accepted by DFA
-  stringAcceptedByDFA(targetString, transitions) {
+  stringAcceptedByDFA(targetString) {
     let i = 0;
     let nextTransition;
-    targetString.split('').forEach(symbol => {
-      if (i == 0) {
-        nextTransition = transitions[this.startState][symbol][0];
+    targetString.split('').every((symbol, index) => {
+      if (!this.symbols.includes(symbol)) {
+        nextTransition = '';
+        return false;
+      }
+      if (index === 0) {
+        nextTransition = this.transitions[this.startState][symbol][0];
         console.log(symbol, 'x', this.startState, '->', nextTransition);
-        i++;
       } else {
-        nextTransition = transitions[nextTransition][symbol][0];
+        nextTransition = this.transitions[nextTransition][symbol][0];
         console.log(
           symbol,
           'x',
-          transitions[nextTransition][symbol][0],
+          this.transitions[nextTransition][symbol][0],
           '->',
           nextTransition,
         );
-        i++;
       }
+      return true;
     });
 
     if (this.endStates.includes(nextTransition)) return true;
@@ -185,13 +196,12 @@ class FaModel {
     // return back every final states
   };
 
-  stringAcceptedByNFA = (targetString, transitions) => {
+  stringAcceptedByNFA = targetString => {
     const possibleState = this.findAllStates(
       targetString,
-      transitions,
+      this.transitions,
       this.startState,
     );
-    console.log(possibleState);
     const found = this.endStates.find(val => {
       if (possibleState.includes(val)) {
         return true;
