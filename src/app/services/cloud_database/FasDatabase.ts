@@ -16,7 +16,7 @@ class FaDatabase extends BaseDatabase<FaModel> {
   async fetchAllFa(
     nextPageKey?: string,
     titleStartWith?: string,
-    orderBy?: string | db.FieldPath,
+    orderBys?: Array<string | db.FieldPath>,
   ): Promise<ListModel<FaModel>> {
     const queryOptions = new Array<db.QueryConstraint>();
 
@@ -26,7 +26,7 @@ class FaDatabase extends BaseDatabase<FaModel> {
       queryOptions.push(db.where('title', '<=', titleStartWith + '\uf8ff'));
     }
 
-    return super.fetchAll(nextPageKey, orderBy, queryOptions);
+    return super.fetchAll(nextPageKey, orderBys, queryOptions);
   }
 }
 

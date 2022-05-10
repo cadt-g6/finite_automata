@@ -1,16 +1,18 @@
+import BaseModel from './BaseModel';
+
 interface Transitions {
   [k: string]: {
     [k: string]: string[];
   };
 }
 
-class FaModel {
-  title?: string;
+class FaModel extends BaseModel {
   states: string[];
   symbols: string[];
   startState: string;
   endStates: string[];
   transitions: Transitions;
+  title?: string;
 
   constructor(
     states: string[],
@@ -18,12 +20,17 @@ class FaModel {
     startState: string,
     endStates: string[],
     transitions: Transitions,
+    createdAt?: Date,
+    updatedAt?: Date,
+    title?: string,
   ) {
+    super(createdAt, updatedAt);
     this.states = states;
     this.symbols = symbols;
     this.startState = startState;
     this.endStates = endStates;
     this.transitions = transitions;
+    this.title = title;
   }
 
   isNFA(): Boolean {
