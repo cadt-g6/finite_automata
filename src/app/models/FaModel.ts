@@ -41,11 +41,14 @@ class FaModel {
   stringAcceptedByDFA(targetString) {
     let i = 0;
     let nextTransition;
-    targetString.split('').forEach(symbol => {
-      if (i == 0) {
+    targetString.split('').every((symbol, index) => {
+      if (!this.symbols.includes(symbol)) {
+        nextTransition = '';
+        return false;
+      }
+      if (index === 0) {
         nextTransition = this.transitions[this.startState][symbol][0];
         console.log(symbol, 'x', this.startState, '->', nextTransition);
-        i++;
       } else {
         nextTransition = this.transitions[nextTransition][symbol][0];
         console.log(
@@ -55,8 +58,8 @@ class FaModel {
           '->',
           nextTransition,
         );
-        i++;
       }
+      return true;
     });
 
     if (this.endStates.includes(nextTransition)) return true;
