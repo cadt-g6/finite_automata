@@ -10,6 +10,8 @@ import {
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import FaModel from 'app/models/FaModel';
+import FaViewHelper from 'app/helpers/FaViewHelper';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -28,24 +30,36 @@ const StyledLink = styled(Link)(({ theme }) => ({
   color: '#192849',
 }));
 
-const FaCardItem = () => {
+interface FaCardItemProps {
+  item?: FaModel;
+}
+
+const FaCardItem = (props: FaCardItemProps) => {
+  const item = props.item;
+  const states = FaViewHelper.constructStates('States', item?.states || []);
+  const symbols = FaViewHelper.constructStates('Symbols', item?.symbols || []);
+  const finalStates = FaViewHelper.constructStates(
+    'Final states',
+    item?.endStates || [],
+  );
+
   return (
     <StyledBox>
       <div>
-        <Typography>Finite Automata - Fa</Typography>
+        <Typography>{item && item.title}</Typography>
         <Typography
           variant="subtitle1"
           sx={{ color: 'rgba(0,0,0,0.6)' }}
-        >{`State:{q1,q2,q3,q4,q5} - Symbol: {a,b,c}`}</Typography>
+        >{`${states} - ${symbols}`}</Typography>
         <Chip
           sx={{ margin: '18px 4px', color: 'rgba(0,0,0,0.6)' }}
-          label="Start state: q0"
+          label={`Start state: ${item?.startState}`}
         />
         <Chip
           sx={{ margin: '18px 4px', color: 'rgba(0,0,0,0.6)' }}
-          label="Final state: {q2, q4}"
+          label={finalStates}
         />
-        <StyledLink to="/">
+        <StyledLink to="/add">
           <Typography variant="subtitle1">View</Typography>
         </StyledLink>
       </div>

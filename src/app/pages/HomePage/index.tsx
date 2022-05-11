@@ -11,6 +11,9 @@ import { Helmet } from 'react-helmet-async';
 import Title from './components/Title';
 import Search from './components/Search';
 import FaCardContainer from './components/FaCardContainer';
+import FaDatabase from 'app/services/cloud_database/FasDatabase';
+import ListModel from 'app/models/ListModel';
+import FaModel from 'app/models/FaModel';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   margin: '64px 144px',
@@ -22,6 +25,17 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 }));
 
 export function HomePage() {
+  const [faList, setFaList] = React.useState<ListModel<FaModel>>();
+
+  React.useEffect(() => {
+    async function loadFa() {
+      const database = new FaDatabase();
+      const result = await database.fetchAllFa();
+      setFaList(result);
+    }
+    loadFa();
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -34,7 +48,7 @@ export function HomePage() {
         <Grid sx={{ maxWidth: '1200px' }} container direction="row" spacing={2}>
           <Search />
           <Grid item xs={12} md={9}>
-            <FaCardContainer />
+            <FaCardContainer faList={faList!} />
             <Pagination
               size="small"
               sx={{ display: 'flex', justifyContent: 'center' }}
