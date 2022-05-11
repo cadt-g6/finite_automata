@@ -19,15 +19,10 @@ import { useTranslation } from 'react-i18next';
 import { ThemeProvider } from '@mui/material';
 import { theme } from 'themes';
 import PageLayout from './components/PageLayout';
-import FirebaseConfig from './services/cloud_database/FirebaseConfig';
+import './services/cloud_database/FirebaseConfig';
 
 export function App() {
   const { i18n } = useTranslation();
-
-  React.useEffect(() => {
-    FirebaseConfig.initialize();
-  });
-
   return (
     <BrowserRouter>
       <Helmet

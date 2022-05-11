@@ -17,4 +17,5 @@ class FirebaseConfig {
   }
 }
 
+FirebaseConfig.initialize();
 export default FirebaseConfig;
