@@ -19,13 +19,13 @@ abstract class BaseDatabase<T extends BaseModel> {
   // - If nextPageKey is null => not more page to load
   async fetchAll(
     nextPageKey?: string,
-    orderBys?: Array<string | db.FieldPath>,
     queries?: db.QueryConstraint[],
+    directionStr?: db.OrderByDirection,
   ): Promise<ListModel<T>> {
     const queryOptions = this.constructQueryOptions(
       nextPageKey,
-      orderBys,
       queries,
+      directionStr,
     );
 
     const reference = this.collectionReference();
@@ -88,19 +88,13 @@ abstract class BaseDatabase<T extends BaseModel> {
 
   constructQueryOptions(
     nextPageKey?: string,
-    orderBys?: Array<string | db.FieldPath>,
     queries?: db.QueryConstraint[],
+    directionStr?: db.OrderByDirection,
   ): db.QueryConstraint[] {
-    const queryOptions = new Array<db.QueryConstraint>(db.limit(this.pageSize));
+    const queryOptions = new Array<db.QueryConstraint>();
 
     queryOptions.push(db.limit(this.pageSize));
-    queryOptions.push(db.orderBy('created_at'));
-
-    if (orderBys) {
-      for (const orderBy of orderBys) {
-        queryOptions.push(db.orderBy(orderBy));
-      }
-    }
+    queryOptions.push(db.orderBy('created_at', directionStr || 'asc'));
 
     if (nextPageKey) {
       queryOptions.push(db.startAfter(nextPageKey));
