@@ -78,7 +78,7 @@ class FaModel extends BaseModel {
         epsilon_state_transition[i]={}
         epsilon_state_transition[i]['E']=nfa[i]['E']
       })
-      // console.log("Epsilon_state_transition:",epsilon_state_transition)
+    // console.log("Epsilon_state_transition:",epsilon_state_transition)
 
     //find dfa start state
     if (epsilon_state.includes(nfa_start_state)){
@@ -89,10 +89,15 @@ class FaModel extends BaseModel {
       
       //test state with epsilon
       epsilon_state_transition[nfa_start_state]['E'].forEach(function(i, iindex){
-        list_tmp_state.push(i)
+        if (!list_tmp_state.includes(i)){
+          list_tmp_state.push(i)
+        }
+        // console.log("i",i)
       })
+      // console.log("list_tmp_state",list_tmp_state)
 
-      list_tmp_state.push('q0')
+
+
       list_tmp_state.sort()
       list_tmp_state.forEach(function(i,index){
         tmp_state = tmp_state + i
@@ -108,6 +113,8 @@ class FaModel extends BaseModel {
       dfa_start_state = tmp_state
       dfa_state_test.push(tmp_state)
     }
+
+    // console.log("dfa start state", dfa_start_state)
 
     let testcheck = 0
 
@@ -166,7 +173,7 @@ class FaModel extends BaseModel {
     dfa= {
       states: dfa_state.slice(),
       symbols: dfa_path.slice(),
-      startState: this.startState,
+      startState: dfa_start_state.slice(),
       endStates: dfa_end_state.slice(),
       transitions: JSON.parse(JSON.stringify(dfa_transition))
     }
