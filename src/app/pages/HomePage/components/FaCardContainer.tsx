@@ -5,15 +5,17 @@ import React from 'react';
 import FaCardItem from './FaCardItem';
 
 interface FaCardContainerProps {
-  faList?: ListModel<FaModel>;
+  faList: ListModel<FaModel>;
+  [props: string]: any;
 }
 
-const FaCardContainer = (props: FaCardContainerProps) => {
+const FaCardContainer = ({ faList, ...props }: FaCardContainerProps) => {
   return (
     <Grid item>
-      {props.faList?.items.map(item => {
-        return <FaCardItem item={item} />;
-      })}
+      {faList &&
+        faList.items.map((item, index) => {
+          return <FaCardItem key={index} item={item} />;
+        })}
     </Grid>
   );
 };

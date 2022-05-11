@@ -11,7 +11,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import FaModel from 'app/models/FaModel';
-import FaViewHelper from 'app/helpers/FaViewHelper';
+import { toStateString } from 'utils/string-utils';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -32,16 +32,13 @@ const StyledLink = styled(Link)(({ theme }) => ({
 
 interface FaCardItemProps {
   item?: FaModel;
+  [props: string]: any;
 }
 
-const FaCardItem = (props: FaCardItemProps) => {
-  const item = props.item;
-  const states = FaViewHelper.constructStates('States', item?.states || []);
-  const symbols = FaViewHelper.constructStates('Symbols', item?.symbols || []);
-  const finalStates = FaViewHelper.constructStates(
-    'Final states',
-    item?.endStates || [],
-  );
+const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
+  const states = toStateString('States', item?.states || []);
+  const symbols = toStateString('Symbols', item?.symbols || []);
+  const finalStates = toStateString('Final states', item?.endStates || []);
 
   return (
     <StyledBox>
