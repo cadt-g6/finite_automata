@@ -85,11 +85,11 @@ export function HomePage() {
             {faList ? (
               faList.nextPageKey && !searchKeyword.length ? (
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   onClick={loadMoreFa}
-                  sx={{ display: 'flex', margin: '0 auto' }}
+                  sx={{ display: 'flex', width: '100%' }}
                 >
-                  Load More
+                  Load More...
                 </Button>
               ) : (
                 <Typography sx={{ textAlign: 'center' }}>
