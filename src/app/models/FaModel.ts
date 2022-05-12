@@ -23,8 +23,9 @@ class FaModel extends BaseModel {
     createdAt?: Date,
     updatedAt?: Date,
     title?: string,
+    id?: string,
   ) {
-    super(createdAt, updatedAt);
+    super(id, createdAt, updatedAt);
     this.states = states;
     this.symbols = symbols;
     this.startState = startState;
