@@ -6,7 +6,10 @@ import { getTransitionObjectFromForm } from 'utils/form-utils';
 import FaModel from 'app/models/FaModel';
 import Features from './components/Features';
 import SnackBar from 'app/components/SnackBar';
-import Slide, { SlideProps } from '@mui/material/Slide';
+import { useParams } from 'react-router-dom';
+import FaCacheService from 'app/services/cache/FaCacheService';
+import FaDatabase from 'app/services/cloud_database/FasDatabase';
+import { useHistory } from 'react-router-dom';
 
 const StyledContainer = styled('div')(({ theme }) => ({
   margin: '64px 144px',
@@ -16,9 +19,32 @@ const StyledContainer = styled('div')(({ theme }) => ({
   },
 }));
 
+type Params = {
+  id: string;
+};
+
 export function AddFaPage() {
   const [faData, setFaData] = useState<any>();
   const [open, setOpen] = useState(false);
+  const { id } = useParams<Params>();
+  const history = useHistory();
+
+  useEffect(() => {
+    async function loadExistingFaById(id) {
+      // fetch from cache
+      let fa = new FaCacheService().get(id);
+      if (fa) {
+        setFaData(fa);
+      } else {
+        // fetch from firebase
+        fa = await new FaDatabase().fetchOne(id);
+        setFaData(fa);
+      }
+      if (!fa) history.push('add');
+    }
+    if (id) loadExistingFaById(id);
+  }, [history, id]);
+
   const onSubmit = (data, e) => {
     const { initialState, states, alphabets, endStates, ...newData } = data;
 
@@ -29,6 +55,7 @@ export function AddFaPage() {
       endStates,
       getTransitionObjectFromForm(data),
     );
+
     setFaData(Fa);
     setOpen(true);
   };

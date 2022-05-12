@@ -1,13 +1,4 @@
-import {
-  Box,
-  Container,
-  Divider,
-  Grid,
-  styled,
-  Pagination,
-  Button,
-  Typography,
-} from '@mui/material';
+import { Box, Divider, Grid, styled, Button, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Title from './components/Title';
@@ -17,6 +8,7 @@ import FaDatabase from 'app/services/cloud_database/FasDatabase';
 import ListModel from 'app/models/ListModel';
 import FaModel from 'app/models/FaModel';
 import FaCardSkeleton from './components/FaCardSkeleton';
+import FaCacheService from 'app/services/cache/FaCacheService';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   margin: '64px 144px',
@@ -31,20 +23,28 @@ export function HomePage() {
   const [faList, setFaList] = useState<ListModel<FaModel>>();
   const [filteredFa, setFilteredFa] = useState<ListModel<FaModel>>();
   const [searchKeyword, setSearchKeyword] = useState('');
-  const database = new FaDatabase();
+
   useEffect(() => {
     async function loadFa() {
-      const result = await database.fetchAllFa();
+      const result = await new FaDatabase().fetchAllFa();
       console.log(result);
       setFaList(result);
     }
     loadFa();
   }, []);
 
+  useEffect(() => {
+    function cacheItems() {
+      const cacheService = new FaCacheService();
+      cacheService.setAll(faList?.items || []);
+    }
+    cacheItems();
+  }, [faList?.items, setFaList]);
+
   const loadMoreFa = async () => {
     if (faList && faList.nextPageKey) {
       try {
-        const result = await database.fetchAllFa(faList.nextPageKey);
+        const result = await new FaDatabase().fetchAllFa(faList.nextPageKey);
         const data: ListModel<FaModel> = { ...faList };
         data.items = [...data.items, ...result.items];
         data.nextPageKey = result.nextPageKey;

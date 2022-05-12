@@ -37,6 +37,7 @@ export function App() {
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route exact path="/add" component={AddFaPage} />
+            <Route exact path="/fas/:id" component={AddFaPage} />
             <Route component={NotFoundPage} />
           </Switch>
         </PageLayout>
