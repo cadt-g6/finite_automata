@@ -40,7 +40,7 @@ export function AddFaPage() {
         fa = await new FaDatabase().fetchOne(id);
         setFaData(fa);
       }
-      if (!fa) history.push('add');
+      if (!fa) history.push({ pathname: '/add' });
     }
     if (id) loadExistingFaById(id);
   }, [history, id]);
