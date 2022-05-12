@@ -49,9 +49,8 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
   return (
     <StyledBox>
       <div>
-        <StyledHover>
-          <Typography onClick={onViewPressed}>{item && item.title}</Typography>
-        </StyledHover>
+        <StyledHover onClick={onViewPressed}>{item && item.title}</StyledHover>
+
         <Typography
           variant="subtitle1"
           sx={{ color: 'rgba(0,0,0,0.6)' }}
