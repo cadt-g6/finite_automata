@@ -9,6 +9,7 @@ import {
   Autocomplete,
   FormHelperText,
 } from '@mui/material';
+import { FieldError, Message } from 'react-hook-form';
 
 const SelectField = styled(Autocomplete)(({ theme }) => ({
   'label + &': {
@@ -29,8 +30,8 @@ const errorStyle = {
 };
 
 type SelectProps = {
-  error?: string;
-  errorMsg?: string;
+  error?: FieldError[] | FieldError;
+  errorMsg?: Message;
   multiple?: boolean;
   label?: string;
   [props: string]: any;

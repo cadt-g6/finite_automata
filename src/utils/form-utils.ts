@@ -1,3 +1,5 @@
+import FaModel from 'app/models/FaModel';
+
 export const getArrayFromValues = (value: string) => {
   if (!value) return [];
   const regExp =
@@ -13,11 +15,11 @@ export const getArrayFromValues = (value: string) => {
 
 export const getTransitionObjectFromForm = datas => {
   if (!datas) return {};
-  const { states, alphabets } = datas;
+  const { states, symbols } = datas;
   let transitions = {};
   getArrayFromValues(states).forEach(state => {
     let alphabetTransition = {};
-    getArrayFromValues(alphabets).forEach(alphabet => {
+    getArrayFromValues(symbols).forEach(alphabet => {
       alphabetTransition[alphabet] = datas[`${state}${alphabet}`]
         ? datas[`${state}${alphabet}`]
         : [];
@@ -27,4 +29,38 @@ export const getTransitionObjectFromForm = datas => {
   });
 
   return transitions;
+};
+
+export const getTransitionDefaultValues = (states, symbols, transitions) => {
+  let data = {};
+  getArrayFromValues(states).forEach(state => {
+    getArrayFromValues(symbols).forEach(symbol => {
+      data[`${state}${symbol}`] = transitions[state][symbol];
+    });
+  });
+  return data;
+};
+
+export const getDefaultValuesFromFaData = (datas?: FaModel) => {
+  if (!datas)
+    return {
+      states: '',
+      symbols: '',
+      startState: '',
+      endStates: [],
+      title: '',
+    };
+
+  return {
+    states: datas.states.join(','),
+    symbols: datas.symbols.join(','),
+    startState: datas.startState,
+    endStates: datas.endStates,
+    title: datas.title,
+    ...getTransitionDefaultValues(
+      datas.states,
+      datas.symbols,
+      datas.transitions,
+    ),
+  };
 };

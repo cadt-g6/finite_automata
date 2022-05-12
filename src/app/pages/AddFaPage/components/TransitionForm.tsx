@@ -11,8 +11,10 @@ import { Box, TextField } from '@mui/material';
 import { getArrayFromValues } from 'utils/form-utils';
 import SelectForm from './Fields/SelectForm';
 import { Controller } from 'react-hook-form';
+import { useLocation } from 'react-router-dom';
 
-const TransitionForm = ({ states, alphabets, control }) => {
+const TransitionForm = ({ states, symbols, control }) => {
+  const location = useLocation();
   return (
     <Box
       sx={theme => ({
@@ -33,7 +35,7 @@ const TransitionForm = ({ states, alphabets, control }) => {
               >
                 Q&sum;
               </TableCell>
-              {getArrayFromValues(alphabets).map((item, index) => (
+              {getArrayFromValues(symbols).map((item, index) => (
                 <TableCell
                   key={index}
                   sx={{
@@ -59,7 +61,7 @@ const TransitionForm = ({ states, alphabets, control }) => {
                 >
                   {row}
                 </TableCell>
-                {getArrayFromValues(alphabets).map((column, index) => (
+                {getArrayFromValues(symbols).map((column, index) => (
                   <TableCell
                     key={index}
                     sx={{
@@ -67,20 +69,38 @@ const TransitionForm = ({ states, alphabets, control }) => {
                       borderRight: '1px solid rgba(224, 224, 224, 1)',
                     }}
                   >
-                    <Controller
-                      name={`${row}${column}`}
-                      control={control}
-                      render={({ field: { onChange } }) => (
-                        <SelectForm
-                          size="small"
-                          multiple={true}
-                          options={getArrayFromValues(states)}
-                          onChange={(event, reason, details) =>
-                            onChange(reason)
-                          }
-                        />
-                      )}
-                    />
+                    {location.pathname !== '/add' ? (
+                      <Controller
+                        name={`${row}${column}`}
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                          <SelectForm
+                            size="small"
+                            multiple={true}
+                            options={getArrayFromValues(states)}
+                            value={value}
+                            onChange={(event, reason, details) =>
+                              onChange(reason)
+                            }
+                          />
+                        )}
+                      />
+                    ) : (
+                      <Controller
+                        name={`${row}${column}`}
+                        control={control}
+                        render={({ field: { onChange } }) => (
+                          <SelectForm
+                            size="small"
+                            multiple={true}
+                            options={getArrayFromValues(states)}
+                            onChange={(event, reason, details) =>
+                              onChange(reason)
+                            }
+                          />
+                        )}
+                      />
+                    )}
                   </TableCell>
                 ))}
               </TableRow>

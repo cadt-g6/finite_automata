@@ -6,10 +6,11 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Button,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import FaModel from 'app/models/FaModel';
 import { toStateString } from 'utils/string-utils';
 
@@ -23,11 +24,8 @@ const StyledBox = styled(Box)(({ theme }) => ({
     '0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)',
 }));
 
-const StyledLink = styled(Link)(({ theme }) => ({
-  display: 'block',
-  width: 'max-content',
-  textDecoration: 'none',
-  color: '#192849',
+const StyledHover = styled(Typography)(({ theme }) => ({
+  cursor: 'pointer',
 }));
 
 interface FaCardItemProps {
@@ -39,11 +37,20 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
   const states = toStateString('States', item?.states || []);
   const symbols = toStateString('Symbols', item?.symbols || []);
   const finalStates = toStateString('Final states', item?.endStates || []);
+  const history = useHistory();
+
+  const onViewPressed = e => {
+    if (item) {
+      const id = item!.id;
+      history.push(`/fas/${id}`);
+    }
+  };
 
   return (
     <StyledBox>
       <div>
-        <Typography>{item && item.title}</Typography>
+        <StyledHover onClick={onViewPressed}>{item && item.title}</StyledHover>
+
         <Typography
           variant="subtitle1"
           sx={{ color: 'rgba(0,0,0,0.6)' }}
@@ -56,9 +63,6 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
           sx={{ margin: '18px 4px', color: 'rgba(0,0,0,0.6)' }}
           label={finalStates}
         />
-        <StyledLink to="/add">
-          <Typography variant="subtitle1">View</Typography>
-        </StyledLink>
       </div>
       <div>
         <IconButton>
