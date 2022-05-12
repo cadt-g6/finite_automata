@@ -9,6 +9,8 @@ import ListModel from 'app/models/ListModel';
 import FaModel from 'app/models/FaModel';
 import FaCardSkeleton from './components/FaCardSkeleton';
 import FaCacheService from 'app/services/cache/FaCacheService';
+import useQuery from 'app/hooks/useQuery';
+import { validateSortByQuery } from 'utils/string-utils';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   margin: '64px 144px',
@@ -20,18 +22,27 @@ const StyledContainer = styled(Box)(({ theme }) => ({
 }));
 
 export function HomePage() {
+  const query = useQuery();
   const [faList, setFaList] = useState<ListModel<FaModel>>();
   const [filteredFa, setFilteredFa] = useState<ListModel<FaModel>>();
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [sortBy, setSortBy] = useState<'desc' | 'asc'>(
+    validateSortByQuery(query.get('sortBy')!) || 'desc',
+  );
+
+  async function loadFa() {
+    const result = await new FaDatabase().fetchAllFa(
+      undefined,
+      undefined,
+      sortBy,
+    );
+    console.log(result);
+    setFaList(result);
+  }
 
   useEffect(() => {
-    async function loadFa() {
-      const result = await new FaDatabase().fetchAllFa();
-      console.log(result);
-      setFaList(result);
-    }
     loadFa();
-  }, []);
+  }, [sortBy]);
 
   useEffect(() => {
     function cacheItems() {
@@ -44,7 +55,11 @@ export function HomePage() {
   const loadMoreFa = async () => {
     if (faList && faList.nextPageKey) {
       try {
-        const result = await new FaDatabase().fetchAllFa(faList.nextPageKey);
+        const result = await new FaDatabase().fetchAllFa(
+          faList.nextPageKey,
+          undefined,
+          sortBy,
+        );
         const data: ListModel<FaModel> = { ...faList };
         data.items = [...data.items, ...result.items];
         data.nextPageKey = result.nextPageKey;
@@ -58,11 +73,12 @@ export function HomePage() {
   const onSearch = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
   ) => {
+    const keywordEvent = event.target.value;
     setSearchKeyword(event.target.value);
     if (faList) {
       const data: ListModel<FaModel> = { ...faList };
       data.items = data.items.filter(item =>
-        item.title?.toLowerCase().includes(searchKeyword.toLowerCase()),
+        item.title?.toLowerCase().includes(keywordEvent.toLowerCase()),
       );
       setFilteredFa(data);
     }
@@ -74,7 +90,7 @@ export function HomePage() {
         <meta name="description" content="A Boilerplate application homepage" />
       </Helmet>
       <StyledContainer>
-        <Title />
+        <Title setSortBy={setSortBy} sortBy={sortBy} />
         <Divider sx={{ margin: '22px 0' }} />
         <Grid sx={{ maxWidth: '1200px' }} container direction="row" spacing={2}>
           <Search onSearch={onSearch} />
