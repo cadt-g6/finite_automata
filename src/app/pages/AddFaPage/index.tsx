@@ -28,7 +28,7 @@ type Params = {
 };
 
 export function AddFaPage() {
-  const [faData, setFaData] = useState<any>();
+  const [faData, setFaData] = useState<FaModel>();
   const [open, setOpen] = useState(false);
   const { id } = useParams<Params>();
   const history = useHistory();

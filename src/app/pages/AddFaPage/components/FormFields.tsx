@@ -1,20 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Tooltip,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  Autocomplete,
-  styled,
-  Box,
-  Divider,
-  Grid,
-  Button,
-  useTheme,
-} from '@mui/material';
-
+import React, { useState } from 'react';
+import { Box, Divider, Grid, Button } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 
@@ -22,7 +7,7 @@ import InputForm from './Fields/InputForm';
 import SelectForm from './Fields/SelectForm';
 import Title from './Title';
 import TransitionForm from './TransitionForm';
-import ValidateChecked from './ValidateChecked';
+
 import {
   getArrayFromValues,
   getDefaultValuesFromFaData,
@@ -30,33 +15,42 @@ import {
 
 const FormFields = ({ faData, onSubmit }) => {
   const location = useLocation();
+
   const {
     control,
     watch,
     formState: { errors },
     handleSubmit,
     setValue,
-    resetField,
     getValues,
   } = useForm({
     mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues: getDefaultValuesFromFaData(faData),
   });
-  useEffect(() => {
-    // setValue('states', 'q0,q1');
-    console.log(getValues());
-  }, [setValue]);
-  const theme = useTheme();
-  const [isGenerated, setIsGenerated] = useState(faData ? true : false);
 
+  const [isGenerated, setIsGenerated] = useState(faData ? true : false);
   const resetTransition = () => {
-    getArrayFromValues(getValues('states')).forEach(state => {
-      getArrayFromValues(getValues('symbols')).forEach(symbol => {
-        // Todo
-      });
-    });
+    let inputted =
+      getValues('states') &&
+      getValues('symbols') &&
+      getValues('startState') &&
+      getValues('endStates') &&
+      getValues('endStates').length > 0;
+
+    if (inputted) {
+      setValue('endStates', getValues().endStates);
+      setValue('startState', getValues().startState);
+      setValue('states', getValues().states);
+      setValue('symbols', getValues().symbols);
+      setValue('title', getValues().title);
+
+      if (!isGenerated) {
+        setIsGenerated(true);
+      }
+    }
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
       <Grid container direction="row">
@@ -212,33 +206,14 @@ const FormFields = ({ faData, onSubmit }) => {
               )}
             </Box>
           </div>
-
-          {isGenerated ? (
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ color: 'white' }}
-              onClick={() => resetTransition()}
-            >
-              RESET TRANSITIONS
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ color: 'white' }}
-              onClick={() =>
-                getValues('states') &&
-                getValues('symbols') &&
-                getValues('startState') &&
-                getValues('endStates') &&
-                getValues('endStates').length > 0 &&
-                setIsGenerated(!isGenerated)
-              }
-            >
-              GENERATE TRANSITIONS
-            </Button>
-          )}
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{ color: 'white' }}
+            onClick={() => resetTransition()}
+          >
+            {isGenerated ? 'RESET TRANSITIONS' : 'GENERATE TRANSITION'}
+          </Button>
         </Grid>
 
         <Grid item xs={12} md={8} lg={9}>
