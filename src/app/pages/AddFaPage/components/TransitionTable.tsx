@@ -70,7 +70,7 @@ const TransitionTable = ({ faData }) => {
                       borderRight: '1px solid rgba(224, 224, 224, 1)',
                     }}
                   >
-                    {transitions[row][column].map((nextSymbol, index) => {
+                    {transitions[row][column]?.map((nextSymbol, index) => {
                       return index + 1 === transitions[row][column].length
                         ? `${nextSymbol}`
                         : `${nextSymbol} ,`;
