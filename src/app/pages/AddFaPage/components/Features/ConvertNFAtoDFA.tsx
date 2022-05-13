@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography, Grid, Box, styled, IconButton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Link } from 'react-router-dom';
+import SimpleDialog from 'app/components/Dialogs/SimpleDialog';
+import FaModel from 'app/models/FaModel';
+import Graphviz from 'graphviz-react';
+import TransitionTable from '../TransitionTable';
+import DfatoNfaDialog from 'app/components/Dialogs/DfatoNfaDialog';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -14,15 +19,23 @@ const StyledBox = styled(Box)(({ theme }) => ({
     '0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)',
 }));
 
-const StyledLink = styled(Link)(({ theme }) => ({
+const StyledTypography = styled(Typography)(({ theme }) => ({
   display: 'block',
   width: 'max-content',
-  textDecoration: 'none',
   color: '#192849',
   marginTop: '30px',
 }));
 
-const ConvertNFAtoDFA = () => {
+const ConvertNFAtoDFA = ({ faData }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
   return (
     <StyledBox>
       <div>
@@ -33,9 +46,25 @@ const ConvertNFAtoDFA = () => {
         >
           Construct an equivalent DFA from an NFA
         </Typography>
-        <StyledLink to="/">
-          <Typography>Test</Typography>
-        </StyledLink>
+
+        <StyledTypography onClick={handleOpen} sx={{ cursor: 'pointer' }}>
+          Test
+        </StyledTypography>
+        {faData && (
+          <DfatoNfaDialog
+            open={open}
+            faData={faData}
+            handleClose={handleClose}
+            content={''}
+            graph={
+              <Graphviz
+                dot={faData.toDotString()}
+                options={{ height: '200px' }}
+              />
+            }
+            transitionTable={<TransitionTable faData={faData} />}
+          />
+        )}
       </div>
       <div>
         <IconButton>
