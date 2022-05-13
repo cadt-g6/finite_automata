@@ -381,7 +381,7 @@ class FaModel extends BaseModel {
           this.transitions[state][symbol].forEach(nextState => {
             dotStr += '' + state + ' -> ';
             dotStr += nextState;
-            dotStr += ' ' + '[label=' + symbol + '];\n';
+            dotStr += ' ' + '[label=' + symbol === 'E' ? 'ε' : symbol + '];\n';
           });
         }
       }
