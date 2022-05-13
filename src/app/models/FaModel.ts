@@ -377,11 +377,14 @@ class FaModel extends BaseModel {
 
     for (const state in this.transitions) {
       for (const symbol in this.transitions[state]) {
-        if (this.transitions[state][symbol].length) {
+        if (this.transitions[state][symbol].length > 0) {
           this.transitions[state][symbol].forEach(nextState => {
-            dotStr += '' + state + ' -> ';
-            dotStr += nextState;
-            dotStr += ' ' + '[label=' + symbol === 'E' ? 'ε' : symbol + '];\n';
+            if (nextState) {
+              dotStr += '' + state + ' -> ';
+              dotStr += nextState;
+              dotStr +=
+                ' ' + '[label=' + (symbol === 'E' ? 'ε' : symbol) + '];\n';
+            }
           });
         }
       }
