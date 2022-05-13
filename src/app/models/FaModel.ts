@@ -362,6 +362,31 @@ class FaModel extends BaseModel {
     if (found) return true;
     else return false;
   };
+
+  toDotString = () => {
+    let dotStr = 'digraph fsm {\n';
+    dotStr += 'rankdir=LR;\n';
+    dotStr += 'size="8,5";\n';
+    dotStr += 'node [shape = point]; INITIAL_STATE\n';
+    dotStr +=
+      'node [shape = doublecircle]; ' + this.endStates.join(',') + ';\n';
+    dotStr += 'node [shape = circle];\n';
+    dotStr += 'INITIAL_STATE -> ' + this.startState + ';\n';
+
+    for (const state in this.transitions) {
+      for (const symbol in this.transitions[state]) {
+        dotStr += '' + state + ' -> ';
+        this.transitions[state][symbol].forEach(nextState => {
+          dotStr += nextState;
+        });
+        dotStr += ' ' + '[label=' + symbol + '];\n';
+      }
+    }
+
+    dotStr += '}';
+
+    return dotStr;
+  };
 }
 
 export default FaModel;
