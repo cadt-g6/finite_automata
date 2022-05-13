@@ -33,7 +33,7 @@ const ActionContainer = styled('div')(({ theme }) => ({
   },
 }));
 
-const Title = () => {
+const Title = ({ sortBy, setSortBy }) => {
   return (
     <Grid container>
       <Grid item xs={12} sm={6} lg={7.5} md={6}>
@@ -58,7 +58,12 @@ const Title = () => {
           <form>
             <FormControl>
               <InputLabel>Sort</InputLabel>
-              <Select label="Sort" size="small" value="desc">
+              <Select
+                label="Sort"
+                size="small"
+                onChange={e => setSortBy(e.target.value)}
+                value={sortBy}
+              >
                 <MenuItem value="asc">Oldest</MenuItem>
                 <MenuItem value="desc">Lastest</MenuItem>
               </Select>

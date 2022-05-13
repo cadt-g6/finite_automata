@@ -29,6 +29,7 @@ export const faModelConverter: FirestoreDataConverter<FaModel> = {
       undefined,
       undefined,
       data.title,
+      snapshot.id,
     );
 
     faModel.createdAt = data.created_at;

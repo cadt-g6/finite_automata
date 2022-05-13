@@ -9,12 +9,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box, TextField } from '@mui/material';
 import { getArrayFromValues } from 'utils/form-utils';
-import SelectForm from './Fields/SelectForm';
-import { Controller } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
 
-const TransitionForm = ({ states, symbols, control }) => {
-  const location = useLocation();
+const TransitionTable = ({ faData }) => {
+  const { states, symbols, endStates, startState, transitions } = faData;
   return (
     <Box
       sx={theme => ({
@@ -59,7 +56,11 @@ const TransitionForm = ({ states, symbols, control }) => {
                   component="th"
                   scope="row"
                 >
-                  {row}
+                  {startState === row
+                    ? `-> ${row}`
+                    : endStates.includes(row)
+                    ? `* ${row}`
+                    : `${row}`}
                 </TableCell>
                 {getArrayFromValues(symbols).map((column, index) => (
                   <TableCell
@@ -69,38 +70,11 @@ const TransitionForm = ({ states, symbols, control }) => {
                       borderRight: '1px solid rgba(224, 224, 224, 1)',
                     }}
                   >
-                    {location.pathname !== '/add' ? (
-                      <Controller
-                        name={`${row}${column}`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <SelectForm
-                            size="small"
-                            multiple={true}
-                            options={getArrayFromValues(states)}
-                            value={value}
-                            onChange={(event, reason, details) =>
-                              onChange(reason)
-                            }
-                          />
-                        )}
-                      />
-                    ) : (
-                      <Controller
-                        name={`${row}${column}`}
-                        control={control}
-                        render={({ field: { onChange } }) => (
-                          <SelectForm
-                            size="small"
-                            multiple={true}
-                            options={getArrayFromValues(states)}
-                            onChange={(event, reason, details) =>
-                              onChange(reason)
-                            }
-                          />
-                        )}
-                      />
-                    )}
+                    {transitions[row][column]?.map((nextSymbol, index) => {
+                      return index + 1 === transitions[row][column].length
+                        ? `${nextSymbol ? nextSymbol : '∅'}`
+                        : `${nextSymbol ? nextSymbol : '∅'} ,`;
+                    })}
                   </TableCell>
                 ))}
               </TableRow>
@@ -112,4 +86,4 @@ const TransitionForm = ({ states, symbols, control }) => {
   );
 };
 
-export default TransitionForm;
+export default TransitionTable;

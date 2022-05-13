@@ -4,13 +4,14 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { Grid } from '@mui/material';
 
-const Search = () => {
+const Search = ({ onSearch }) => {
   return (
     <Grid item xs={12} md={3}>
       <TextField
         label="Search by title"
         size="medium"
         fullWidth
+        onChange={onSearch}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

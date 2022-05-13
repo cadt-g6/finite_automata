@@ -40,7 +40,7 @@ const Features = ({ faData }) => {
           <AcceptedString faData={faData} />
         </Grid>
         <Grid item xs={12} md={4.5}>
-          <ConvertNFAtoDFA />
+          <ConvertNFAtoDFA faData={faData} />
         </Grid>
         <Grid item xs={12} md={4.5}>
           <MinimizeDfa />
