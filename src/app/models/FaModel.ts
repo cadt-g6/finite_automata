@@ -68,7 +68,7 @@ class FaModel extends BaseModel {
     //find state that have epsilon path
     let epsilon_state: string[] = [];
     for (const i in nfa) {
-      if (nfa[i]['E'].length > 0) epsilon_state.push(i);
+      if (nfa[i]['E'] && nfa[i]['E'].length > 0) epsilon_state.push(i);
     }
     // console.log("Epsilon_state:" ,epsilon_state)
 
@@ -134,14 +134,15 @@ class FaModel extends BaseModel {
         tmp_state = '';
         let arry = i.split(/(..)/g).filter(s => s);
         arry.forEach(function (y, yindex) {
-          nfa[y][j].forEach(function (k, kindex) {
-            if (epsilon_state.includes(k)) {
-              epsilon_state_transition[k]['E'].forEach(function (x, xindex) {
-                list_tmp_state.push(k);
-                list_tmp_state.push(x);
-              });
-            } else list_tmp_state.push(k);
-          });
+          Array.isArray(nfa[y][j]) &&
+            nfa[y][j].forEach(function (k, kindex) {
+              if (epsilon_state.includes(k)) {
+                epsilon_state_transition[k]['E'].forEach(function (x, xindex) {
+                  list_tmp_state.push(k);
+                  list_tmp_state.push(x);
+                });
+              } else list_tmp_state.push(k);
+            });
         });
 
         list_tmp_state.forEach(element => {
@@ -376,11 +377,13 @@ class FaModel extends BaseModel {
 
     for (const state in this.transitions) {
       for (const symbol in this.transitions[state]) {
-        dotStr += '' + state + ' -> ';
-        this.transitions[state][symbol].forEach(nextState => {
-          dotStr += nextState;
-        });
-        dotStr += ' ' + '[label=' + symbol + '];\n';
+        if (this.transitions[state][symbol].length) {
+          this.transitions[state][symbol].forEach(nextState => {
+            dotStr += '' + state + ' -> ';
+            dotStr += nextState;
+            dotStr += ' ' + '[label=' + symbol + '];\n';
+          });
+        }
       }
     }
 
