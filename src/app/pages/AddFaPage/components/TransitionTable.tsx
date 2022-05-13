@@ -72,8 +72,8 @@ const TransitionTable = ({ faData }) => {
                   >
                     {transitions[row][column]?.map((nextSymbol, index) => {
                       return index + 1 === transitions[row][column].length
-                        ? `${nextSymbol}`
-                        : `${nextSymbol} ,`;
+                        ? `${nextSymbol ? nextSymbol : '∅'}`
+                        : `${nextSymbol ? nextSymbol : '∅'} ,`;
                     })}
                   </TableCell>
                 ))}
