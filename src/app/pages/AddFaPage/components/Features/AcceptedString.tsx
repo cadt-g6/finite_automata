@@ -10,6 +10,8 @@ import {
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Link } from 'react-router-dom';
 import StringAcceptedDialog from 'app/components/Dialogs/StringAcceptedDiaglog';
+import { Graphviz } from 'graphviz-react';
+import TransitionTable from '../TransitionTable';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -69,6 +71,7 @@ const AcceptedString = ({ faData }) => {
         </Box>
         {faData && (
           <StringAcceptedDialog
+            faData={faData}
             isAccepted={
               isNfa
                 ? faData.stringAcceptedByNFA(testString)
@@ -78,6 +81,13 @@ const AcceptedString = ({ faData }) => {
             content={testString}
             open={open}
             handleClose={handleClose}
+            graph={
+              <Graphviz
+                dot={faData.toDotString()}
+                options={{ height: '200px' }}
+              />
+            }
+            transitionTable={<TransitionTable faData={faData} />}
           />
         )}
       </div>
