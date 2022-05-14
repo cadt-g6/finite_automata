@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Link } from 'react-router-dom';
-import StringAcceptedDialog from 'app/components/Dialogs/StringAcceptedDiaglog';
+import StringAcceptedDialog from 'app/components/Dialogs/StringAcceptedDialog';
 import { Graphviz } from 'graphviz-react';
 import TransitionTable from '../TransitionTable';
 
