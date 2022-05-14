@@ -43,7 +43,7 @@ const Features = ({ faData }) => {
           <ConvertNFAtoDFA faData={faData} />
         </Grid>
         <Grid item xs={12} md={4.5}>
-          <MinimizeDfa />
+          <MinimizeDfa faData={faData} />
         </Grid>
       </Grid>
     </div>
