@@ -30,8 +30,41 @@ class FaModel extends BaseModel {
     this.symbols = symbols;
     this.startState = startState;
     this.endStates = endStates;
-    this.transitions = transitions;
     this.title = title;
+    this.transitions = this.validateTransition(states, transitions);
+  }
+
+  // set default to missing transition
+  validateTransition(states: string[], transitions: Transitions): Transitions {
+    let validatedTransition: Transitions = {};
+
+    for (const state in transitions) {
+      if (states.includes(state)) {
+        validatedTransition[state] = {};
+        if (!transitions[state]) {
+          for (const symbol in transitions[state]) {
+            validatedTransition[state][symbol] = [];
+          }
+        } else {
+          for (const symbol in transitions[state]) {
+            if (!transitions[state][symbol]) {
+              transitions[state][symbol] = [];
+            }
+            validatedTransition[state][symbol] = transitions[state][symbol];
+          }
+        }
+      }
+
+      for (const symbol in transitions[state]) {
+        validatedTransition[state][symbol] = validatedTransition[state][
+          symbol
+        ].filter(e => e !== '');
+        console.log(validatedTransition[state][symbol]);
+      }
+    }
+
+    this.transitions = validatedTransition;
+    return validatedTransition;
   }
 
   isNFA(): Boolean {
@@ -40,7 +73,7 @@ class FaModel extends BaseModel {
     for (const state in transitions) {
       for (const symbol in transitions[state]) {
         const symbolTransition = transitions[state][symbol];
-        if (symbolTransition.length != 1) isNfa = true;
+        if (symbolTransition.length !== 1) isNfa = true;
       }
     }
     return isNfa ? true : false;
@@ -162,7 +195,7 @@ class FaModel extends BaseModel {
           dfa_end_state.push(tmp_state);
         dfa_transition[i][j] = [tmp_state];
 
-        if (dfa_state_test.includes(tmp_state) == false)
+        if (dfa_state_test.includes(tmp_state) === false)
           dfa_state_test.push(tmp_state);
       });
       dfa_state.push(i);
@@ -270,7 +303,6 @@ class FaModel extends BaseModel {
   }
   //test if string is accepted by DFA
   stringAcceptedByDFA(targetString) {
-    let i = 0;
     let nextTransition;
     targetString.split('').every((symbol, index) => {
       if (!this.symbols.includes(symbol)) {
@@ -322,6 +354,7 @@ class FaModel extends BaseModel {
 
       // Check if there're more than 1 transition of a symbol
       // Then Loop through each transition and Find Possible Outcome states
+      console.log(transitions[state][input]);
       if (transitions[state][input].length > 1) {
         transitions[state][input].forEach((transition, index) => {
           this.findAllStates(
