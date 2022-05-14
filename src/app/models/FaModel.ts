@@ -34,6 +34,29 @@ class FaModel extends BaseModel {
     this.transitions = this.validateTransition(states, transitions);
   }
 
+  copyWith(
+    states: string[],
+    symbols: string[],
+    startState: string,
+    endStates: string[],
+    transitions: Transitions,
+    createdAt?: Date,
+    updatedAt?: Date,
+    title?: string,
+    id?: string,
+  ): FaModel {
+    this.id = id || this.id;
+    this.createdAt = createdAt ? createdAt.toUTCString() : this.createdAt;
+    this.updatedAt = updatedAt ? updatedAt.toUTCString() : this.updatedAt;
+    this.states = states || this.states;
+    this.symbols = symbols || this.symbols;
+    this.startState = startState || this.startState;
+    this.endStates = endStates || this.endStates;
+    this.title = title || this.title;
+    this.transitions = transitions || this.transitions;
+    return this;
+  }
+
   // set default to missing transition
   validateTransition(states: string[], transitions: Transitions): Transitions {
     let validatedTransition: Transitions = {};
