@@ -195,27 +195,57 @@ class FaModel extends BaseModel {
     // console.log("nfa_state", nfa_state)
     // console.log("path", path)
     // console.log("nfa_end_state",nfa_end_state)
-    // console.log("nfa_transition",nfa)
+    console.log("nfa_transition",nfa)
 
+    let check_null=0
     //generate all dfa state
     nfa_state.forEach(function (i, indexi) {
       for (const j in nfa[i]) {
+        // console.log("j",j)
         let t = '';
         let check_end_state = false;
         nfa[i][j].forEach(function (k, indexk) {
           if (nfa_end_state.includes(k)) {
             check_end_state = true;
           }
+          // console.log("k=",k)
           t = t + k;
         });
         if (check_end_state && !dfa_end_state.includes(t)) {
           dfa_end_state.push(t);
+        }
+        if (t == ''){
+          check_null = 1;
         }
         if (!dfa_state.includes(t) && t.length > 0) {
           dfa_state.push(t);
         }
       }
     });
+    if (check_null == 1){
+      let t = ''
+      let loop = true
+      let str = dfa_state[dfa_state.length-1]+'1'
+      let strArr:string[] = str.split(""), strTemp=0;
+      while (loop){
+        let str_front:string = ''
+        for(let n=0; n<strArr.length; n++){
+          if(!isNaN(Number(strArr[n]))){
+            strTemp+=parseInt(strArr[n]);
+          }else{
+              str_front += strArr[n]
+          }
+        }
+        t=str_front+strTemp.toString()
+        if (!dfa_state.includes(t)){
+          break
+        }else{
+          strArr.push('1')
+        }
+      }
+      dfa_state.push(t)
+      // console.log(str_front+strTemp.toString())
+    }
     // console.log("dfa_state",dfa_state)
 
     //set transition to dfa
@@ -227,6 +257,9 @@ class FaModel extends BaseModel {
         nfa[i][j].forEach(function (k, indexk) {
           t = t + k;
         });
+        if (t==''){
+          t=dfa_state[dfa_state.length-1]
+        }
         dfa_transition[i][j] = [t];
       }
     });
