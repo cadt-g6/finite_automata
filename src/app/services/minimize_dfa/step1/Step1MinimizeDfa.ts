@@ -1,14 +1,15 @@
 import FaHelper from '../../../helpers/FaHelper';
 import FaModel from '../../../models/FaModel';
+import Step1Result from '../results/Step1Result';
 
+// Remove none accessible states
 class Step1MinimizeDfa {
   fa: FaModel;
   constructor(fa: FaModel) {
     this.fa = fa;
   }
 
-  // Remove none accessible states
-  exec(): FaModel {
+  exec(): Step1Result {
     let initialNextStates = FaHelper.findNextStateFromSingleState(
       this.fa.startState,
       this.fa,
@@ -44,7 +45,11 @@ class Step1MinimizeDfa {
     this.fa.transitions = transitions;
     this.fa.states = Array.from(FaHelper.sortStates(accessibleStates));
 
-    return this.fa;
+    return new Step1Result(
+      this.fa.states.filter(e => !Array.from(accessibleStates).includes(e)),
+      Array.from(accessibleStates),
+      this.fa,
+    );
   }
 }
 

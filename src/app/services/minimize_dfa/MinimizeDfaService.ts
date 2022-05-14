@@ -1,6 +1,10 @@
 import FaModel from '../../models/FaModel';
 import Step1MinimizeDfa from './step1/Step1MinimizeDfa';
 import Step2MinimizeDfa from './step2/Step2MinimizeDfa';
+import Step3MinimizeDfa from './step3/Step3MinimizeDfa';
+import Step1Result from './results/Step1Result';
+import Step2Result from './results/Step2Result';
+import Step3Result from './results/Step3Result';
 
 class MinimizeDFAService {
   fa: FaModel;
@@ -8,19 +12,14 @@ class MinimizeDFAService {
     this.fa = fa;
   }
 
-  cachedStep1Service!: Step1MinimizeDfa;
-  cachedStep2Service!: Step2MinimizeDfa;
+  step1Result!: Step1Result;
+  step2Result!: Step2Result;
+  step3Result!: Step3Result;
 
-  step1(fa: FaModel): FaModel {
-    this.cachedStep1Service = new Step1MinimizeDfa(fa);
-    fa = this.cachedStep1Service.exec();
-    return fa;
-  }
-
-  step2(fa: FaModel): FaModel {
-    this.cachedStep2Service = new Step2MinimizeDfa(fa);
-    fa = this.cachedStep2Service!.exec();
-    return fa;
+  exec() {
+    this.step1Result = new Step1MinimizeDfa(this.fa).exec();
+    this.step2Result = new Step2MinimizeDfa(this.step1Result).exec();
+    this.step3Result = new Step3MinimizeDfa(this.fa, this.step2Result).exec();
   }
 }
 
