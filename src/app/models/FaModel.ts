@@ -56,10 +56,11 @@ class FaModel extends BaseModel {
       }
 
       for (const symbol in transitions[state]) {
-        validatedTransition[state][symbol] = validatedTransition[state][
-          symbol
-        ].filter(e => e !== '');
-        console.log(validatedTransition[state][symbol]);
+        if (validatedTransition[state] && validatedTransition[state][symbol]) {
+          validatedTransition[state][symbol] = validatedTransition[state][
+            symbol
+          ].filter(e => e !== '');
+        }
       }
     }
 
