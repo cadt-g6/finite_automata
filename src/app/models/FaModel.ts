@@ -341,6 +341,11 @@ class FaModel extends BaseModel {
 
     // Loop each character of target String
     targetString.split('').every((input, indexString) => {
+      if (!this.symbols.includes(input)) {
+        state = '';
+        result = [];
+        return false;
+      }
       // Check if a state has transition with Epsilon
       if (transitions[state]['E'] && transitions[state]['E'].length !== 0) {
         transitions[state]['E'].forEach((transition, index) => {
