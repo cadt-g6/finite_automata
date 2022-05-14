@@ -95,16 +95,23 @@ for (const iterator of Object.entries(fa.transitions!)) {
   console.log(iterator);
 }
 
+service.exec();
+
 // step1 FA result:
-const step1FaResult = service.step1(fa);
 console.log(`\nstep1:`);
-console.log(`state: ${step1FaResult.states}`);
+console.log(`state: ${service.step1Result?.newFA.states}`);
 
 // step2 FA result:
-const step2FaResult = service.step2(step1FaResult);
+const step2Result = service.step2Result;
 console.log(`\nstep2:`);
-console.log(`state: ${step2FaResult.states}`);
+console.log(`markedSets1stItr: ${step2Result.markedSets1stItr}`);
+console.log(`markedSets2ndItr: ${step2Result.markedSets2ndItr}`);
+console.log(`mergedEqualStates: ${step2Result.mergedEqualStates}`);
+
+const step3Result = service.step3Result;
+console.log(`\nstep2:`);
+console.log(`state: ${step3Result.newFA.states}`);
 console.log('transitions:');
-for (const iterator of Object.entries(step2FaResult.transitions!)) {
+for (const iterator of Object.entries(step3Result.newFA.transitions!)) {
   console.log(iterator);
 }
