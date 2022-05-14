@@ -37,7 +37,7 @@ abstract class BaseDatabase<T extends BaseModel> {
       items.push(element);
     }
 
-    if (items.length > 0) {
+    if (items.length >= this.pageSize) {
       nextPageKey = items[items.length - 1].createdAt;
     } else {
       nextPageKey = undefined;
