@@ -6,8 +6,8 @@ export const faModelConverter: FirestoreDataConverter<FaModel> = {
     return {
       states: faModel.states,
       symbols: faModel.symbols,
-      startState: faModel.startState,
-      finalStates: faModel.endStates,
+      start_state: faModel.startState,
+      final_states: faModel.endStates,
       transitions: faModel.transitions,
       created_at: faModel.createdAt,
       updated_at: faModel.updatedAt,
