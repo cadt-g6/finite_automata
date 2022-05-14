@@ -1,8 +1,8 @@
 import FaModel from '../../../models/FaModel';
-import Step1Result from '../Step1Result';
+import Step1Result from '../results/Step1Result';
 import FirstIteration from './FirstIteration';
 import NextIteration from './NextIteration';
-import Step2Result from '../Step2Result';
+import Step2Result from '../results/Step2Result';
 
 // Merge equal states
 class Step2MinimizeDfa {

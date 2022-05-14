@@ -1,10 +1,10 @@
 import FaModel from '../../models/FaModel';
 import Step1MinimizeDfa from './step1/Step1MinimizeDfa';
-import Step1Result from './Step1Result';
 import Step2MinimizeDfa from './step2/Step2MinimizeDfa';
-import Step2Result from './Step2Result';
 import Step3MinimizeDfa from './step3/Step3MinimizeDfa';
-import Step3Result from './Step3Result';
+import Step1Result from './results/Step1Result';
+import Step2Result from './results/Step2Result';
+import Step3Result from './results/Step3Result';
 
 class MinimizeDFAService {
   fa: FaModel;

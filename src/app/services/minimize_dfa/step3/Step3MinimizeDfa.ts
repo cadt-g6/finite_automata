@@ -1,6 +1,6 @@
 import FaModel from '../../../models/FaModel';
-import Step2Result from '../Step2Result';
-import Step3Result from '../Step3Result';
+import Step2Result from '../results/Step2Result';
+import Step3Result from '../results/Step3Result';
 
 // Construct the minimized DFA.
 class Step3MinimizeDfa {
