@@ -8,8 +8,9 @@ import Step3Result from './results/Step3Result';
 
 class MinimizeDFAService {
   fa: FaModel;
+
   constructor(fa: FaModel) {
-    this.fa = fa;
+    this.fa = Object.assign({}, fa);
   }
 
   step1Result!: Step1Result;

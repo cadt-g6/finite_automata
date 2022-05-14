@@ -21,6 +21,12 @@ class Step3MinimizeDfa {
     this.fa.startState = result['startState'];
     this.fa.endStates = result['finalStates'];
 
+    let states: string[] = [];
+    for (const state in this.fa.transitions) {
+      states.push(state);
+    }
+
+    this.fa.states = states;
     return new Step3Result(this.fa);
   }
 
@@ -36,7 +42,7 @@ class Step3MinimizeDfa {
       let statesStr = mergedEqualStatesArr[index];
       let states = new Set(statesStr.split(','));
 
-      let key = 'q' + index + "'";
+      let key = 'm' + index;
       if (!transitions[key]) transitions[key] = {};
 
       for (let symbol of this.fa.symbols) {
@@ -51,7 +57,7 @@ class Step3MinimizeDfa {
                   .split(',')
                   .includes(_state)
               ) {
-                nextStatesList.add('q' + i + "'");
+                nextStatesList.add('m' + i);
               }
             }
           }

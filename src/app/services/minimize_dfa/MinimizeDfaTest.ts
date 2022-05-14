@@ -115,3 +115,5 @@ console.log('transitions:');
 for (const iterator of Object.entries(step3Result.newFA.transitions!)) {
   console.log(iterator);
 }
+
+console.log(`old: ${fa.states}`);
