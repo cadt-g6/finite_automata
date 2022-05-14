@@ -6,10 +6,13 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Button,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import FaModel from 'app/models/FaModel';
+import { toStateString } from 'utils/string-utils';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -21,33 +24,45 @@ const StyledBox = styled(Box)(({ theme }) => ({
     '0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12)',
 }));
 
-const StyledLink = styled(Link)(({ theme }) => ({
-  display: 'block',
-  width: 'max-content',
-  textDecoration: 'none',
-  color: '#192849',
+const StyledHover = styled(Typography)(({ theme }) => ({
+  cursor: 'pointer',
 }));
 
-const FaCardItem = () => {
+interface FaCardItemProps {
+  item?: FaModel;
+  [props: string]: any;
+}
+
+const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
+  const states = toStateString('States', item?.states || []);
+  const symbols = toStateString('Symbols', item?.symbols || []);
+  const finalStates = toStateString('Final states', item?.endStates || []);
+  const history = useHistory();
+
+  const onViewPressed = e => {
+    if (item) {
+      const id = item!.id;
+      history.push(`/fas/${id}`);
+    }
+  };
+
   return (
     <StyledBox>
       <div>
-        <Typography>Finite Automata - Fa</Typography>
+        <StyledHover onClick={onViewPressed}>{item && item.title}</StyledHover>
+
         <Typography
           variant="subtitle1"
           sx={{ color: 'rgba(0,0,0,0.6)' }}
-        >{`State:{q1,q2,q3,q4,q5} - Symbol: {a,b,c}`}</Typography>
+        >{`${states} - ${symbols}`}</Typography>
         <Chip
           sx={{ margin: '18px 4px', color: 'rgba(0,0,0,0.6)' }}
-          label="Start state: q0"
+          label={`Start state: ${item?.startState}`}
         />
         <Chip
           sx={{ margin: '18px 4px', color: 'rgba(0,0,0,0.6)' }}
-          label="Final state: {q2, q4}"
+          label={finalStates}
         />
-        <StyledLink to="/">
-          <Typography variant="subtitle1">View</Typography>
-        </StyledLink>
       </div>
       <div>
         <IconButton>

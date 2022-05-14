@@ -4,6 +4,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Link } from 'react-router-dom';
 import SimpleDialog from 'app/components/Dialogs/SimpleDialog';
 import FaModel from 'app/models/FaModel';
+import Graphviz from 'graphviz-react';
+import TransitionTable from '../TransitionTable';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -49,17 +51,27 @@ const TestIfNfaOrDfa = ({ faData }) => {
         <StyledTypography onClick={handleOpen} sx={{ cursor: 'pointer' }}>
           Test
         </StyledTypography>
-        <SimpleDialog
-          open={open}
-          handleClose={handleClose}
-          content={
-            faData
-              ? faData && faData.isNFA()
-                ? 'It is NFA'
-                : 'It is DFA'
-              : 'Please Design FA first'
-          }
-        />
+        {faData && (
+          <SimpleDialog
+            open={open}
+            faData={faData}
+            handleClose={handleClose}
+            content={
+              faData
+                ? faData && faData.isNFA()
+                  ? 'It is NFA'
+                  : 'It is DFA'
+                : 'Please Design FA first'
+            }
+            graph={
+              <Graphviz
+                dot={faData.toDotString()}
+                options={{ height: '200px' }}
+              />
+            }
+            transitionTable={<TransitionTable faData={faData} />}
+          />
+        )}
       </div>
       <div>
         <IconButton>

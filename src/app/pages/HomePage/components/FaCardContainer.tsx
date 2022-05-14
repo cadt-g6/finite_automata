@@ -1,13 +1,21 @@
 import { Grid } from '@mui/material';
+import FaModel from 'app/models/FaModel';
+import ListModel from 'app/models/ListModel';
 import React from 'react';
 import FaCardItem from './FaCardItem';
 
-const FaCardContainer = () => {
+interface FaCardContainerProps {
+  faList: ListModel<FaModel>;
+  [props: string]: any;
+}
+
+const FaCardContainer = ({ faList, ...props }: FaCardContainerProps) => {
   return (
     <Grid item>
-      <FaCardItem />
-      <FaCardItem />
-      <FaCardItem />
+      {faList &&
+        faList.items.map((item, index) => {
+          return <FaCardItem key={index} item={item} />;
+        })}
     </Grid>
   );
 };

@@ -8,13 +8,14 @@ const Title = ({ control }) => {
       <Controller
         name="title"
         control={control}
-        render={({ field: { onChange, onBlur } }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <TextField
             size="small"
             onChange={onChange}
-            sx={{ position: 'relative', top: '14px' }}
+            sx={{ width: '40vw', position: 'relative', top: '14px' }}
             placeholder="Design FA..."
             variant="standard"
+            value={value}
             InputProps={{ disableUnderline: true }}
           />
         )}

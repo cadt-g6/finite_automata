@@ -5,13 +5,7 @@ class NextIteration {
   fa: FaModel;
 
   mergedEqualStates!: Set<string>;
-  startState!: string;
-  finalStates!: string[];
-  transitions!: {
-    [k: string]: {
-      [k: string]: string[];
-    };
-  };
+  nextMarkedSets!: Set<string>;
 
   constructor(fa: FaModel) {
     this.fa = fa;
@@ -19,23 +13,23 @@ class NextIteration {
 
   exec(_markedSets: Set<string>, _statesSets: Set<string>) {
     let nextMarkedSets = this.getNextMarkedSets(_markedSets, _statesSets);
+    this.nextMarkedSets = new Set(nextMarkedSets);
+
     let equalPairStates: Set<string> = new Set(
       Array.from(_statesSets).filter(e => !nextMarkedSets.has(e)),
     );
 
     this.mergedEqualStates = this.mergeEqualStates(equalPairStates);
-    let result = this.equalStatesToDfaInfos(this.mergedEqualStates!);
-
-    this.transitions = result['transitions'];
-    this.startState = result['startState'];
-    this.finalStates = result['finalStates'];
   }
 
   // find more marked sets that remain after first iteration.
   getNextMarkedSets(
-    markedSets: Set<string>,
-    statesSets: Set<string>,
+    _markedSets: Set<string>,
+    _statesSets: Set<string>,
   ): Set<string> {
+    let markedSets = new Set([...Array.from(_markedSets)]);
+    let statesSets = new Set([...Array.from(_statesSets)]);
+
     // Found once but result not yet found or still in remain states
     let tryOnce = new Set<string>();
     let remainStatesSets = new Set<string>(
@@ -86,62 +80,6 @@ class NextIteration {
       }
     }
     return nextStates;
-  }
-
-  // return new transition, start state & final state from mergedEqualStates.
-  // => [transitions, startState, finalStates]
-  equalStatesToDfaInfos(mergedEqualStates: Set<string>) {
-    let transitions: { [k: string]: { [k: string]: string[] } } = {};
-    let startState = '';
-    let finalStates: string[] = [];
-
-    let mergedEqualStatesArr = Array.from(mergedEqualStates);
-    for (const index in mergedEqualStatesArr) {
-      let statesStr = mergedEqualStatesArr[index];
-      let states = new Set(statesStr.split(','));
-
-      let key = 'q' + index + "'";
-      if (!transitions[key]) transitions[key] = {};
-
-      for (let symbol of this.fa.symbols) {
-        let nextStatesList = new Set<string>();
-        for (let state of Array.from(states)) {
-          let nextStates = this.fa.transitions![state][symbol].join(',');
-          for (let _state of nextStates?.split(',') ?? []) {
-            for (const i in Array.from(mergedEqualStates)) {
-              if (
-                Array.from(mergedEqualStates)
-                  [i].toString()
-                  .split(',')
-                  .includes(_state)
-              ) {
-                nextStatesList.add('q' + i + "'");
-              }
-            }
-          }
-        }
-
-        transitions[key][symbol] = Array.from(nextStatesList)
-          .join(',')
-          .split(',');
-      }
-
-      // find startState
-      if (states.has(this.fa.startState)) startState = key;
-
-      // find finalStates
-      for (let state of this.fa.endStates) {
-        if (states.has(state)) {
-          finalStates.push(key);
-        }
-      }
-    }
-
-    return {
-      transitions,
-      startState,
-      finalStates,
-    };
   }
 
   // convert same state together from equalPairStates:

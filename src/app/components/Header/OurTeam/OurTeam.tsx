@@ -2,6 +2,7 @@ import React from 'react';
 import { styled, Typography } from '@mui/material';
 
 import { Link } from 'react-router-dom';
+import AppConstants from 'app/constants/AppConstants';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   color: 'white',
@@ -11,7 +12,7 @@ const StyledLink = styled(Link)(({ theme }) => ({
 const OurTeam = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-      <StyledLink to="/team">
+      <StyledLink to={{ pathname: AppConstants.teamUrl }} target="_blank">
         <Typography
           variant="h6"
           sx={theme => ({
