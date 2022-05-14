@@ -11,7 +11,7 @@ class Step2MinimizeDfa {
   nextIteration: NextIteration;
 
   constructor(step1: Step1Result) {
-    this.fa = step1.newFA;
+    this.fa = Object.assign({}, step1.newFA);
     this.firstIteration = new FirstIteration(this.fa);
     this.nextIteration = new NextIteration(this.fa);
   }

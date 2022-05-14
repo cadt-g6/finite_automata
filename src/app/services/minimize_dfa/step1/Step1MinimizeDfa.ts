@@ -6,7 +6,7 @@ import Step1Result from '../results/Step1Result';
 class Step1MinimizeDfa {
   fa: FaModel;
   constructor(fa: FaModel) {
-    this.fa = fa;
+    this.fa = Object.assign({}, fa);
   }
 
   exec(): Step1Result {

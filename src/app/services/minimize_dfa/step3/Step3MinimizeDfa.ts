@@ -6,10 +6,11 @@ import Step3Result from '../results/Step3Result';
 class Step3MinimizeDfa {
   fa: FaModel;
   step2: Step2Result;
+  prefix: string = 'Q';
 
   constructor(fa: FaModel, step2: Step2Result) {
-    this.fa = fa;
-    this.step2 = step2;
+    this.step2 = Object.assign({}, step2);
+    this.fa = Object.assign({}, fa);
   }
 
   exec(): Step3Result {
@@ -42,7 +43,7 @@ class Step3MinimizeDfa {
       let statesStr = mergedEqualStatesArr[index];
       let states = new Set(statesStr.split(','));
 
-      let key = 'm' + index;
+      let key = this.prefix + index;
       if (!transitions[key]) transitions[key] = {};
 
       for (let symbol of this.fa.symbols) {
@@ -57,7 +58,7 @@ class Step3MinimizeDfa {
                   .split(',')
                   .includes(_state)
               ) {
-                nextStatesList.add('m' + i);
+                nextStatesList.add(this.prefix + i);
               }
             }
           }

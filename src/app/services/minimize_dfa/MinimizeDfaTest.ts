@@ -106,7 +106,7 @@ const step2Result = service.step2Result;
 console.log(`\nstep2:`);
 console.log(`markedSets1stItr: ${step2Result.markedSets1stItr}`);
 console.log(`markedSets2ndItr: ${step2Result.markedSets2ndItr}`);
-console.log(`mergedEqualStates: ${step2Result.mergedEqualStates}`);
+console.log(`mergedEqualStates: ${step2Result.mergedEqualStates.join(', ')}`);
 
 const step3Result = service.step3Result;
 console.log(`\nstep2:`);
