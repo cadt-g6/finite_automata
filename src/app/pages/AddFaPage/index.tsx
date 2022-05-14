@@ -9,7 +9,7 @@ import {
 import FaModel from 'app/models/FaModel';
 import Features from './components/Features';
 import SnackBar from 'app/components/SnackBar';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import FaCacheService from 'app/services/cache/FaCacheService';
 import FaDatabase from 'app/services/cloud_database/FasDatabase';
 import { useHistory } from 'react-router-dom';
@@ -27,11 +27,16 @@ type Params = {
   id: string;
 };
 
+interface stateType {
+  openSnackBar: boolean;
+}
+
 export function AddFaPage() {
-  const [faData, setFaData] = useState<FaModel>();
-  const [open, setOpen] = useState(false);
-  const { id } = useParams<Params>();
   const history = useHistory();
+  const location = useLocation<stateType>();
+  const [faData, setFaData] = useState<FaModel>();
+  const [open, setOpen] = useState(location.state?.openSnackBar);
+  const { id } = useParams<Params>();
 
   useEffect(() => {
     async function loadExistingFaById(id) {
@@ -49,21 +54,54 @@ export function AddFaPage() {
     if (id) loadExistingFaById(id);
   }, [history, id]);
 
-  const onSubmit = (data, e) => {
+  const onSubmit = async (data, e) => {
     const { startState, states, symbols, title, endStates, ...newData } = data;
+    let Fa;
+    if (faData) {
+      Fa = faData?.copyWith(
+        getArrayFromValues(states),
+        getArrayFromValues(symbols),
+        startState,
+        endStates,
+        getTransitionObjectFromForm(data),
+        ...Array(2),
+        title,
+      );
+    } else {
+      Fa = new FaModel(
+        getArrayFromValues(states),
+        getArrayFromValues(symbols),
+        startState,
+        endStates,
+        getTransitionObjectFromForm(data),
+        ...Array(2),
+        title,
+      );
+    }
 
-    const Fa = new FaModel(
-      getArrayFromValues(states),
-      getArrayFromValues(symbols),
-      startState,
-      endStates,
-      getTransitionObjectFromForm(data),
-      ...Array(2),
-      title,
-    );
-    console.log(Fa);
-    setFaData(Fa);
-    setOpen(true);
+    try {
+      if (location.pathname === '/add') {
+        const newFa = await new FaDatabase().create(Fa);
+        if (newFa) {
+          history.replace({
+            pathname: `/fas/${newFa.id}`,
+            state: { openSnackBar: true },
+          } as any);
+        }
+      } else {
+        Fa.updatedAt = new Date().toUTCString();
+        const updatedFa = await new FaDatabase().update(Fa.id!, Fa);
+        if (updatedFa) {
+          new FaCacheService().set(updatedFa);
+          history.replace({
+            pathname: `/fas/${updatedFa.id}`,
+            state: { openSnackBar: true },
+          } as any);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onCloseSnackBar = () => {
