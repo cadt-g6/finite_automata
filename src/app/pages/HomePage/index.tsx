@@ -13,6 +13,8 @@ import useQuery from 'app/hooks/useQuery';
 import { validateOrderByQuery, validateSortByQuery } from 'utils/string-utils';
 import { OrderByFields } from 'app/services/cloud_database/BaseDatabase';
 import { OrderByDirection } from 'firebase/firestore';
+import { useLocation } from 'react-router-dom';
+import SnackBar from 'app/components/SnackBar';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   margin: '64px 144px',
@@ -23,11 +25,17 @@ const StyledContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
+interface locationType {
+  openSnackBar: boolean;
+}
+
 export function HomePage() {
   const query = useQuery();
+  const location = useLocation<locationType>();
   const [faList, setFaList] = useState<ListModel<FaModel>>();
   const [filteredFa, setFilteredFa] = useState<ListModel<FaModel>>();
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [open, setOpen] = useState(false);
   const [orderBy, setOrderBy] = useState<OrderByDirection>(
     validateSortByQuery(query.get('sortBy')),
   );
@@ -47,6 +55,10 @@ export function HomePage() {
   }
 
   useEffect(() => {
+    setOpen(location.state?.openSnackBar);
+  }, [location]);
+
+  useEffect(() => {
     loadFa();
   }, [sortBy, orderBy]);
 
@@ -58,6 +70,9 @@ export function HomePage() {
     cacheItems();
   }, [faList?.items, setFaList]);
 
+  const onCloseSnackBar = () => {
+    setOpen(false);
+  };
   const loadMoreFa = async () => {
     if (faList && faList.nextPageKey) {
       try {
@@ -128,6 +143,13 @@ export function HomePage() {
               <FaCardSkeleton />
             )}
           </Grid>
+          <SnackBar
+            open={open}
+            onClose={onCloseSnackBar}
+            type="success"
+            content="Delete Successfully"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          />
         </Grid>
       </StyledContainer>
     </>

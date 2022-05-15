@@ -13,10 +13,12 @@ import {
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React, { useState, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import FaModel from 'app/models/FaModel';
 import { toStateString } from 'utils/string-utils';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DeleteDialog from 'app/components/Dialogs/DeleteDialog';
+import FaDatabase from 'app/services/cloud_database/FasDatabase';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -33,7 +35,7 @@ const StyledHover = styled(Typography)(({ theme }) => ({
 }));
 
 interface FaCardItemProps {
-  item?: FaModel;
+  item: FaModel;
   [props: string]: any;
 }
 
@@ -41,10 +43,12 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
   const states = toStateString('States', item?.states || []);
   const symbols = toStateString('Symbols', item?.symbols || []);
   const finalStates = toStateString('Final states', item?.endStates || []);
+  const location = useLocation();
   const history = useHistory();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const openDots = Boolean(anchorEl);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const onTitleClick = e => {
     if (item) {
@@ -58,6 +62,34 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const onDelete = async () => {
+    console.log('delete');
+
+    try {
+      if (item.id) {
+        await new FaDatabase().delete(item.id);
+        history.replace({
+          pathname: location.pathname,
+          state: { openSnackBar: true },
+        } as any);
+        history.go(0);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    handleCloseDialog();
+    setAnchorEl(null);
+  };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
   return (
     <StyledBox>
@@ -85,12 +117,26 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
         <IconButton onClick={onMenuClick}>
           <MoreVertIcon />
         </IconButton>
-        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+        <Menu anchorEl={anchorEl} open={openDots} onClose={handleClose}>
           <MenuItem>
-            <ListItemIcon>
+            <ListItemIcon
+              sx={{ alignItems: 'center' }}
+              onClick={handleOpenDialog}
+            >
               <DeleteForeverIcon fontSize="small" color="error" />
+              <ListItemText
+                sx={{ fontSize: '12px', fontWeight: '500', marginLeft: '2px' }}
+              >
+                Delete
+              </ListItemText>
             </ListItemIcon>
-            <ListItemText>Delete</ListItemText>
+
+            <DeleteDialog
+              content={''}
+              open={openDialog}
+              handleClose={handleCloseDialog}
+              onDelete={onDelete}
+            />
           </MenuItem>
         </Menu>
       </div>
