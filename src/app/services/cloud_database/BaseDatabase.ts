@@ -3,6 +3,8 @@ import * as db from 'firebase/firestore';
 import ListModel from 'app/models/ListModel';
 import BaseModel from 'app/models/BaseModel';
 
+export declare type OrderByFields = 'title' | 'created_at' | 'updated_at';
+
 abstract class BaseDatabase<T extends BaseModel> {
   static instance: db.Firestore;
   pageSize: number = 5;
@@ -20,12 +22,14 @@ abstract class BaseDatabase<T extends BaseModel> {
   async fetchAll(
     nextPageKey?: string,
     queries?: db.QueryConstraint[],
-    directionStr?: db.OrderByDirection,
+    orderBy?: OrderByFields,
+    orderByDirection?: db.OrderByDirection,
   ): Promise<ListModel<T>> {
     const queryOptions = this.constructQueryOptions(
       nextPageKey,
       queries,
-      directionStr,
+      orderBy,
+      orderByDirection,
     );
 
     const reference = this.collectionReference();
@@ -38,13 +42,19 @@ abstract class BaseDatabase<T extends BaseModel> {
     }
 
     if (items.length >= this.pageSize) {
-      nextPageKey = items[items.length - 1].createdAt;
+      nextPageKey = this.buildNextPageKey(items[items.length - 1], orderBy);
     } else {
       nextPageKey = undefined;
     }
 
     return new ListModel(items, nextPageKey);
   }
+
+  abstract buildNextPageKey(
+    lastItem: T,
+    orderBy?: OrderByFields,
+    orderByDirection?: db.OrderByDirection,
+  ): string;
 
   async fetchOne(id: string): Promise<T | undefined> {
     const result = await db.getDoc(this.documentReference(id));
@@ -89,12 +99,16 @@ abstract class BaseDatabase<T extends BaseModel> {
   constructQueryOptions(
     nextPageKey?: string,
     queries?: db.QueryConstraint[],
-    directionStr?: db.OrderByDirection,
+    orderBy?: OrderByFields,
+    orderByDirection?: db.OrderByDirection,
   ): db.QueryConstraint[] {
     const queryOptions = new Array<db.QueryConstraint>();
 
+    const fieldPath = orderBy || 'created_at';
+    const directionStr = orderByDirection || 'asc';
+
+    queryOptions.push(db.orderBy(fieldPath, directionStr));
     queryOptions.push(db.limit(this.pageSize));
-    queryOptions.push(db.orderBy('created_at', directionStr || 'asc'));
 
     if (nextPageKey) {
       queryOptions.push(db.startAfter(nextPageKey));

@@ -57,6 +57,10 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
         >{`${states} - ${symbols}`}</Typography>
         <Chip
           sx={{ margin: '18px 4px', color: 'rgba(0,0,0,0.6)' }}
+          label={item ? (item?.isNFA() ? 'NFA' : 'DFA') : 'FA'}
+        />
+        <Chip
+          sx={{ margin: '18px 4px', color: 'rgba(0,0,0,0.6)' }}
           label={`Start state: ${item?.startState}`}
         />
         <Chip
