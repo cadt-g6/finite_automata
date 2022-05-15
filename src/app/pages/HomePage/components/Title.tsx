@@ -33,7 +33,7 @@ const ActionContainer = styled('div')(({ theme }) => ({
   },
 }));
 
-const Title = ({ sortBy, setSortBy }) => {
+const Title = ({ sortBy, setSortBy, orderBy, setOrderBy }) => {
   return (
     <Grid container>
       <Grid item xs={12} sm={6} lg={7.5} md={6}>
@@ -57,6 +57,21 @@ const Title = ({ sortBy, setSortBy }) => {
           </ToggleButtonGroup>
           <form>
             <FormControl>
+              <InputLabel>Order by</InputLabel>
+              <Select
+                label="Order by"
+                size="small"
+                onChange={e => setOrderBy(e.target.value)}
+                value={orderBy}
+              >
+                <MenuItem value="title">Title</MenuItem>
+                <MenuItem value="created_at">Recents create</MenuItem>
+                <MenuItem value="updated_at">Recents update</MenuItem>
+              </Select>
+            </FormControl>{' '}
+          </form>
+          <form>
+            <FormControl>
               <InputLabel>Sort</InputLabel>
               <Select
                 label="Sort"
@@ -69,13 +84,14 @@ const Title = ({ sortBy, setSortBy }) => {
               </Select>
             </FormControl>{' '}
           </form>
+
           <Link to="/add">
             <Button
               sx={{ backgroundColor: '#192849' }}
               variant="contained"
               startIcon={<AddIcon />}
             >
-              ADD FA
+              ADD
             </Button>
           </Link>
         </ActionContainer>
