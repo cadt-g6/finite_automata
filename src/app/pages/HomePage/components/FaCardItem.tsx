@@ -7,12 +7,18 @@ import {
   Menu,
   MenuItem,
   Button,
+  MenuList,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import FaModel from 'app/models/FaModel';
 import { toStateString } from 'utils/string-utils';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DeleteDialog from 'app/components/Dialogs/DeleteDialog';
+import FaDatabase from 'app/services/cloud_database/FasDatabase';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -29,7 +35,7 @@ const StyledHover = styled(Typography)(({ theme }) => ({
 }));
 
 interface FaCardItemProps {
-  item?: FaModel;
+  item: FaModel;
   [props: string]: any;
 }
 
@@ -37,19 +43,58 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
   const states = toStateString('States', item?.states || []);
   const symbols = toStateString('Symbols', item?.symbols || []);
   const finalStates = toStateString('Final states', item?.endStates || []);
+  const location = useLocation();
   const history = useHistory();
 
-  const onViewPressed = e => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openDots = Boolean(anchorEl);
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const onTitleClick = e => {
     if (item) {
       const id = item!.id;
       history.push(`/fas/${id}`);
     }
   };
 
+  const onMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const onDelete = async () => {
+    console.log('delete');
+
+    try {
+      if (item.id) {
+        await new FaDatabase().delete(item.id);
+        history.replace({
+          pathname: location.pathname,
+          state: { openSnackBar: true },
+        } as any);
+        history.go(0);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    handleCloseDialog();
+    setAnchorEl(null);
+  };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
   return (
     <StyledBox>
       <div>
-        <StyledHover onClick={onViewPressed}>{item && item.title}</StyledHover>
+        <StyledHover onClick={onTitleClick}>{item && item.title}</StyledHover>
 
         <Typography
           variant="subtitle1"
@@ -69,11 +114,30 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
         />
       </div>
       <div>
-        <IconButton>
+        <IconButton onClick={onMenuClick}>
           <MoreVertIcon />
         </IconButton>
-        <Menu open={false}>
-          <MenuItem>Edit</MenuItem>
+        <Menu anchorEl={anchorEl} open={openDots} onClose={handleClose}>
+          <MenuItem>
+            <ListItemIcon
+              sx={{ alignItems: 'center' }}
+              onClick={handleOpenDialog}
+            >
+              <DeleteForeverIcon fontSize="small" color="error" />
+              <ListItemText
+                sx={{ fontSize: '12px', fontWeight: '500', marginLeft: '2px' }}
+              >
+                Delete
+              </ListItemText>
+            </ListItemIcon>
+
+            <DeleteDialog
+              content={''}
+              open={openDialog}
+              handleClose={handleCloseDialog}
+              onDelete={onDelete}
+            />
+          </MenuItem>
         </Menu>
       </div>
     </StyledBox>

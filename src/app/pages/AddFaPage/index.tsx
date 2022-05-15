@@ -35,8 +35,12 @@ export function AddFaPage() {
   const history = useHistory();
   const location = useLocation<stateType>();
   const [faData, setFaData] = useState<FaModel>();
-  const [open, setOpen] = useState(location.state?.openSnackBar);
+  const [open, setOpen] = useState(false);
   const { id } = useParams<Params>();
+
+  useEffect(() => {
+    setOpen(location.state?.openSnackBar);
+  }, [location]);
 
   useEffect(() => {
     async function loadExistingFaById(id) {
