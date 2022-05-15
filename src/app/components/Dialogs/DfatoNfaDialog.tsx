@@ -15,6 +15,7 @@ import { toStateString } from 'utils/string-utils';
 import FaModel from 'app/models/FaModel';
 import Graphviz from 'graphviz-react';
 import TransitionTable from 'app/pages/AddFaPage/components/TransitionTable';
+import NfaToDfaService from 'app/services/nfa_to_dfa/NfaToDfaService';
 
 const DfatoNfaDialog = ({
   content,
@@ -25,11 +26,12 @@ const DfatoNfaDialog = ({
   faData,
 }) => {
   const theme = useTheme();
+  const service = new NfaToDfaService(faData);
 
   const states = toStateString('States', faData.states || []);
   const symbols = toStateString('Symbols', faData?.symbols || []);
   const finalStates = toStateString('Final states', faData?.endStates || []);
-  const newDfa = faData.nfatodfa();
+  const newDfa = service.exec();
 
   const newStates = toStateString('States', newDfa.states || []);
   const newSymbols = toStateString('Symbols', newDfa?.symbols || []);
