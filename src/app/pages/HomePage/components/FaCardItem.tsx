@@ -7,12 +7,16 @@ import {
   Menu,
   MenuItem,
   Button,
+  MenuList,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import FaModel from 'app/models/FaModel';
 import { toStateString } from 'utils/string-utils';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -39,17 +43,26 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
   const finalStates = toStateString('Final states', item?.endStates || []);
   const history = useHistory();
 
-  const onViewPressed = e => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const onTitleClick = e => {
     if (item) {
       const id = item!.id;
       history.push(`/fas/${id}`);
     }
   };
 
+  const onMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <StyledBox>
       <div>
-        <StyledHover onClick={onViewPressed}>{item && item.title}</StyledHover>
+        <StyledHover onClick={onTitleClick}>{item && item.title}</StyledHover>
 
         <Typography
           variant="subtitle1"
@@ -69,11 +82,16 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
         />
       </div>
       <div>
-        <IconButton>
+        <IconButton onClick={onMenuClick}>
           <MoreVertIcon />
         </IconButton>
-        <Menu open={false}>
-          <MenuItem>Edit</MenuItem>
+        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+          <MenuItem>
+            <ListItemIcon>
+              <DeleteForeverIcon fontSize="small" color="error" />
+            </ListItemIcon>
+            <ListItemText>Delete</ListItemText>
+          </MenuItem>
         </Menu>
       </div>
     </StyledBox>
