@@ -5,7 +5,10 @@ import Step1Result from '../results/Step1Result';
 // Remove none accessible states
 class Step1MinimizeDfa {
   fa: FaModel;
+  cacheFa: FaModel;
+
   constructor(fa: FaModel) {
+    this.cacheFa = Object.assign({}, fa);
     this.fa = Object.assign({}, fa);
   }
 
@@ -45,11 +48,14 @@ class Step1MinimizeDfa {
     this.fa.transitions = transitions;
     this.fa.states = Array.from(FaHelper.sortStates(accessibleStates));
 
-    return new Step1Result(
-      this.fa.states.filter(e => !Array.from(accessibleStates).includes(e)),
-      Array.from(accessibleStates),
-      this.fa,
+    let accessibleStatesArr = Array.from(accessibleStates);
+    accessibleStatesArr = accessibleStatesArr.sort();
+
+    let removedStates = this.cacheFa.states.filter(
+      e => !accessibleStatesArr.includes(e),
     );
+
+    return new Step1Result(removedStates, accessibleStatesArr, this.fa);
   }
 }
 
