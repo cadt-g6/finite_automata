@@ -48,7 +48,7 @@ const MinimizeDfa = ({ faData }) => {
         <StyledTypography onClick={handleOpen} sx={{ cursor: 'pointer' }}>
           Test
         </StyledTypography>
-        {faData && (
+        {faData && !faData.isNFA() && (
           <MinimizeDialog
             open={open}
             faData={faData}
