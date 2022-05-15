@@ -1,7 +1,7 @@
 import FaModel from 'app/models/FaModel';
 import ListModel from 'app/models/ListModel';
 import * as db from 'firebase/firestore';
-import BaseDatabase from './BaseDatabase';
+import BaseDatabase, { OrderByFields } from './BaseDatabase';
 import { faModelConverter } from './converters/faModelConverter';
 
 class FaDatabase extends BaseDatabase<FaModel> {
@@ -16,7 +16,8 @@ class FaDatabase extends BaseDatabase<FaModel> {
   async fetchAllFa(
     nextPageKey?: string,
     titleStartWith?: string,
-    directionStr?: db.OrderByDirection,
+    orderBy?: OrderByFields,
+    orderByDirection?: db.OrderByDirection,
   ): Promise<ListModel<FaModel>> {
     const queryOptions = new Array<db.QueryConstraint>();
 
@@ -26,7 +27,21 @@ class FaDatabase extends BaseDatabase<FaModel> {
       queryOptions.push(db.where('title', '<=', titleStartWith + '\uf8ff'));
     }
 
-    return super.fetchAll(nextPageKey, queryOptions, directionStr);
+    return super.fetchAll(nextPageKey, queryOptions, orderBy, orderByDirection);
+  }
+
+  buildNextPageKey(
+    lastItem: FaModel,
+    orderBy?: OrderByFields,
+    orderByDirection?: db.OrderByDirection,
+  ): string {
+    switch (orderBy) {
+      case 'title':
+        return lastItem.title!;
+      case 'created_at':
+      default:
+        return lastItem.createdAt;
+    }
   }
 }
 

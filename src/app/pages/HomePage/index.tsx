@@ -10,7 +10,9 @@ import FaModel from 'app/models/FaModel';
 import FaCardSkeleton from './components/FaCardSkeleton';
 import FaCacheService from 'app/services/cache/FaCacheService';
 import useQuery from 'app/hooks/useQuery';
-import { validateSortByQuery } from 'utils/string-utils';
+import { validateOrderByQuery, validateSortByQuery } from 'utils/string-utils';
+import { OrderByFields } from 'app/services/cloud_database/BaseDatabase';
+import { OrderByDirection } from 'firebase/firestore';
 
 const StyledContainer = styled(Box)(({ theme }) => ({
   margin: '64px 144px',
@@ -26,14 +28,18 @@ export function HomePage() {
   const [faList, setFaList] = useState<ListModel<FaModel>>();
   const [filteredFa, setFilteredFa] = useState<ListModel<FaModel>>();
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [sortBy, setSortBy] = useState<'desc' | 'asc'>(
-    validateSortByQuery(query.get('sortBy')!) || 'desc',
+  const [sortBy, setSortBy] = useState<OrderByDirection>(
+    validateSortByQuery(query.get('sortBy')),
+  );
+  const [orderBy, setOrderBy] = useState<OrderByFields>(
+    validateOrderByQuery(query.get('orderBy')),
   );
 
   async function loadFa() {
     const result = await new FaDatabase().fetchAllFa(
       undefined,
       undefined,
+      orderBy,
       sortBy,
     );
     console.log(result);
@@ -42,7 +48,7 @@ export function HomePage() {
 
   useEffect(() => {
     loadFa();
-  }, [sortBy]);
+  }, [sortBy, orderBy]);
 
   useEffect(() => {
     function cacheItems() {
@@ -58,6 +64,7 @@ export function HomePage() {
         const result = await new FaDatabase().fetchAllFa(
           faList.nextPageKey,
           undefined,
+          orderBy,
           sortBy,
         );
         const data: ListModel<FaModel> = { ...faList };
@@ -90,7 +97,12 @@ export function HomePage() {
         <meta name="description" content="A Boilerplate application homepage" />
       </Helmet>
       <StyledContainer>
-        <Title setSortBy={setSortBy} sortBy={sortBy} />
+        <Title
+          setSortBy={setSortBy}
+          sortBy={sortBy}
+          setOrderBy={setOrderBy}
+          orderBy={orderBy}
+        />
         <Divider sx={{ margin: '22px 0' }} />
         <Grid sx={{ maxWidth: '1200px' }} container direction="row" spacing={2}>
           <Search onSearch={onSearch} />
