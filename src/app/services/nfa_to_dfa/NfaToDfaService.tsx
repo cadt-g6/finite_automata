@@ -42,7 +42,7 @@ class NfaToDfaService {
         nfa[i][j].forEach(function (k, indexk) {
           t = t + k;
         });
-        if (!nfa_all_transition.includes(t) && t != '') {
+        if (!nfa_all_transition.includes(t) && t !== '') {
           nfa_all_transition.push(t);
         }
       }
@@ -194,7 +194,7 @@ class NfaToDfaService {
         nfa[i][j].forEach(function (k, indexk) {
           t = t + k;
         });
-        if (!nfa_all_transition.includes(t) && t != '') {
+        if (!nfa_all_transition.includes(t) && t !== '') {
           nfa_all_transition.push(t);
         }
       }
@@ -222,7 +222,7 @@ class NfaToDfaService {
         // if (check_end_state && !dfa_end_state.includes(t)) {
         //   dfa_end_state.push(t);
         // }
-        if (t == '') {
+        if (t === '') {
           check_null = 1;
         }
         if (!dfa_state.includes(t) && t.length > 0) {
@@ -231,7 +231,7 @@ class NfaToDfaService {
       }
     });
 
-    if (check_null == 1) {
+    if (check_null === 1) {
       let t = '';
       let loop = true;
       let str = dfa_state[dfa_state.length - 1] + '1';
@@ -265,7 +265,7 @@ class NfaToDfaService {
         nfa[i][j].forEach(function (k, indexk) {
           t = t + k;
         });
-        if (t == '') {
+        if (t === '') {
           t = dfa_state[dfa_state.length - 1];
         }
         dfa_transition[i][j] = [t];
@@ -307,6 +307,17 @@ class NfaToDfaService {
       if (!dfa_state.includes(i)) {
         dfa_end_state.splice(dfa_state.indexOf(i), 1);
       }
+    });
+
+    //generate end state
+
+    dfa_state.forEach(function (i, iindex) {
+      let arry = i.split(/(..)/g).filter(s => s);
+      arry.forEach(function (j, jindex) {
+        if (nfa_end_state.includes(j)) {
+          dfa_end_state.push(i);
+        }
+      });
     });
 
     let dfa: any = new FaModel(
