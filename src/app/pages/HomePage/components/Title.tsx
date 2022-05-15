@@ -57,12 +57,12 @@ const Title = ({ sortBy, setSortBy, orderBy, setOrderBy }) => {
           </ToggleButtonGroup>
           <form>
             <FormControl>
-              <InputLabel>Order by</InputLabel>
+              <InputLabel>Sort</InputLabel>
               <Select
-                label="Order by"
+                label="Sort"
                 size="small"
-                onChange={e => setOrderBy(e.target.value)}
-                value={orderBy}
+                onChange={e => setSortBy(e.target.value)}
+                value={sortBy}
               >
                 <MenuItem value="title">Title</MenuItem>
                 <MenuItem value="created_at">Recents create</MenuItem>
@@ -72,15 +72,15 @@ const Title = ({ sortBy, setSortBy, orderBy, setOrderBy }) => {
           </form>
           <form>
             <FormControl>
-              <InputLabel>Sort</InputLabel>
+              <InputLabel>Order</InputLabel>
               <Select
-                label="Sort"
+                label="Order"
                 size="small"
-                onChange={e => setSortBy(e.target.value)}
-                value={sortBy}
+                onChange={e => setOrderBy(e.target.value)}
+                value={orderBy}
               >
-                <MenuItem value="asc">Oldest</MenuItem>
-                <MenuItem value="desc">Lastest</MenuItem>
+                <MenuItem value="asc">Ascending</MenuItem>
+                <MenuItem value="desc">Descending</MenuItem>
               </Select>
             </FormControl>{' '}
           </form>

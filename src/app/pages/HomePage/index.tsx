@@ -28,10 +28,10 @@ export function HomePage() {
   const [faList, setFaList] = useState<ListModel<FaModel>>();
   const [filteredFa, setFilteredFa] = useState<ListModel<FaModel>>();
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [sortBy, setSortBy] = useState<OrderByDirection>(
+  const [orderBy, setOrderBy] = useState<OrderByDirection>(
     validateSortByQuery(query.get('sortBy')),
   );
-  const [orderBy, setOrderBy] = useState<OrderByFields>(
+  const [sortBy, setSortBy] = useState<OrderByFields>(
     validateOrderByQuery(query.get('orderBy')),
   );
 
@@ -39,8 +39,8 @@ export function HomePage() {
     const result = await new FaDatabase().fetchAllFa(
       undefined,
       undefined,
-      orderBy,
       sortBy,
+      orderBy,
     );
     console.log(result);
     setFaList(result);
@@ -64,8 +64,8 @@ export function HomePage() {
         const result = await new FaDatabase().fetchAllFa(
           faList.nextPageKey,
           undefined,
-          orderBy,
           sortBy,
+          orderBy,
         );
         const data: ListModel<FaModel> = { ...faList };
         data.items = [...data.items, ...result.items];
