@@ -64,23 +64,21 @@ const Title = ({ sortBy, setSortBy, orderBy, setOrderBy }) => {
                 onChange={e => setSortBy(e.target.value)}
                 value={sortBy}
               >
-                <MenuItem value="title">Title</MenuItem>
-                <MenuItem value="created_at">Recents create</MenuItem>
-                <MenuItem value="updated_at">Recents update</MenuItem>
+                <MenuItem value="title">FA Title</MenuItem>
+                <MenuItem value="created_at">Created Date</MenuItem>
+                <MenuItem value="updated_at">Recently Update</MenuItem>
               </Select>
             </FormControl>{' '}
           </form>
           <form>
             <FormControl>
-              <InputLabel>Order</InputLabel>
               <Select
-                label="Order"
                 size="small"
                 onChange={e => setOrderBy(e.target.value)}
                 value={orderBy}
               >
-                <MenuItem value="asc">Ascending</MenuItem>
-                <MenuItem value="desc">Descending</MenuItem>
+                <MenuItem value="asc">A-Z</MenuItem>
+                <MenuItem value="desc">Z-A</MenuItem>
               </Select>
             </FormControl>{' '}
           </form>
