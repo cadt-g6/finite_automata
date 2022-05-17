@@ -124,6 +124,7 @@ export function HomePage() {
           <Grid item xs={12} md={9}>
             <FaCardContainer
               faList={searchKeyword.length > 0 ? filteredFa! : faList!}
+              setFaList={setFaList}
             />
             {faList ? (
               faList.nextPageKey && !searchKeyword.length ? (

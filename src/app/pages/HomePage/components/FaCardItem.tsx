@@ -19,6 +19,7 @@ import { toStateString } from 'utils/string-utils';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DeleteDialog from 'app/components/Dialogs/DeleteDialog';
 import FaDatabase from 'app/services/cloud_database/FasDatabase';
+import ListModel from 'app/models/ListModel';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -36,10 +37,14 @@ const StyledHover = styled(Typography)(({ theme }) => ({
 
 interface FaCardItemProps {
   item: FaModel;
+  faList: ListModel<FaModel>;
+  setFaList: React.Dispatch<
+    React.SetStateAction<ListModel<FaModel> | undefined>
+  >;
   [props: string]: any;
 }
 
-const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
+const FaCardItem = ({ item, faList, setFaList, ...props }: FaCardItemProps) => {
   const states = toStateString('States', item?.states || []);
   const symbols = toStateString('Symbols', item?.symbols || []);
   const finalStates = toStateString('Final states', item?.endStates || []);
@@ -69,19 +74,20 @@ const FaCardItem = ({ item, ...props }: FaCardItemProps) => {
 
     try {
       if (item.id) {
+        handleCloseDialog();
+        setAnchorEl(null);
+        const data: ListModel<FaModel> = { ...faList };
+        data.items = data.items.filter(fa => fa.id !== item.id);
+        setFaList(data);
         await new FaDatabase().delete(item.id);
         history.replace({
           pathname: location.pathname,
           state: { openSnackBar: true },
         } as any);
-        history.go(0);
       }
     } catch (error) {
       console.log(error);
     }
-
-    handleCloseDialog();
-    setAnchorEl(null);
   };
 
   const handleOpenDialog = () => {
