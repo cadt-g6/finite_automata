@@ -124,11 +124,8 @@ const FaCardItem = ({ item, faList, setFaList, ...props }: FaCardItemProps) => {
           <MoreVertIcon />
         </IconButton>
         <Menu anchorEl={anchorEl} open={openDots} onClose={handleClose}>
-          <MenuItem>
-            <ListItemIcon
-              sx={{ alignItems: 'center' }}
-              onClick={handleOpenDialog}
-            >
+          <MenuItem onClick={handleOpenDialog}>
+            <ListItemIcon sx={{ alignItems: 'center' }}>
               <DeleteForeverIcon fontSize="small" color="error" />
               <ListItemText
                 sx={{ fontSize: '12px', fontWeight: '500', marginLeft: '2px' }}
@@ -136,15 +133,14 @@ const FaCardItem = ({ item, faList, setFaList, ...props }: FaCardItemProps) => {
                 Delete
               </ListItemText>
             </ListItemIcon>
-
-            <DeleteDialog
-              content={''}
-              open={openDialog}
-              handleClose={handleCloseDialog}
-              onDelete={onDelete}
-            />
           </MenuItem>
         </Menu>
+        <DeleteDialog
+          content={''}
+          open={openDialog}
+          handleClose={handleCloseDialog}
+          onDelete={onDelete}
+        />
       </div>
     </StyledBox>
   );
