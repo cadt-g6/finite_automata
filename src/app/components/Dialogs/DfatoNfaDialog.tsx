@@ -32,6 +32,8 @@ const DfatoNfaDialog = ({
   const symbols = toStateString('Symbols', faData?.symbols || []);
   const finalStates = toStateString('Final states', faData?.endStates || []);
   const newDfa = service.exec();
+  console.log(newDfa.endStates);
+  console.log(newDfa.toDotString());
 
   const newStates = toStateString('States', newDfa.states || []);
   const newSymbols = toStateString('Symbols', newDfa?.symbols || []);

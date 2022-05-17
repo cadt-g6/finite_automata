@@ -94,6 +94,7 @@ class FaModel extends BaseModel {
   isNFA(): Boolean {
     const transitions = this.transitions;
     let isNfa = false;
+    if (this.symbols.includes('E')) return true;
     for (const state in transitions) {
       for (const symbol in transitions[state]) {
         const symbolTransition = transitions[state][symbol];
