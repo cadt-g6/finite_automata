@@ -49,13 +49,13 @@ const AcceptedString = ({ faData }) => {
     <StyledBox>
       <div>
         <Typography sx={{ fontSize: '16px' }}>
-          Test if a FA is deterministic or non-deterministic
+          Test if a string is accepted by a FA
         </Typography>
         <Typography
           sx={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.6)' }}
           variant="subtitle1"
         >
-          Language accepted by the FA.
+          String accepted by the FA.
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '14px' }}>
           <TextField
