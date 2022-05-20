@@ -38,6 +38,13 @@ yarn build
 4. Construct an equivalent DFA from an NFA
 5. Minimize a DFA
 
+## Features Folder Structure
+1. Design a finite automaton (FA)  ( app/models/FaModel.ts )
+2. Test if a FA is deterministic or non-deterministic ( app/models/FaModel.ts )
+3. Test if a string is accepted by a FA ( app/models/FaModel.ts )
+4. Construct an equivalent DFA from an NFA ( app/services/nfa_to_dfa )
+5. Minimize a DFA ( app/services/minimize_dfa )
+
 ### Prototype Design
 [Figma Design](https://www.figma.com/file/ihWcAYXKUMY4Ms45odLuPR/Finite-Automata?node-id=7870%3A38450)
 
