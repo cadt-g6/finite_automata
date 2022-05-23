@@ -2,6 +2,8 @@
 # Finite Automata Web Application
 <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" /> <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" /> <img src="https://img.shields.io/badge/firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black"/>
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1363176d-effa-4d1d-b619-fb4037422439/deploy-status)](https://app.netlify.com/sites/fa-cadt/deploys)
+
 ![Feature image](https://user-images.githubusercontent.com/29684683/169877999-6c5a922e-8817-48aa-99f0-4a478d20d4ab.png)
 
 ## Getting Started
